@@ -312,6 +312,7 @@
     <button class="tab-btn" data-tab="articles">🅰️ Articles</button>
     <button class="tab-btn" data-tab="pronouns">🧑 Pronouns</button>
     <button class="tab-btn" data-tab="verbs">🏃 Verbs</button>
+    <button class="tab-btn" data-tab="adverbs">💨 Adverbs</button>
     <button class="tab-btn" data-tab="arcade">🕹️ Arcade</button>
     <button class="tab-btn" data-tab="quiz">🎮 Quiz Games</button>
     <button class="tab-btn" data-tab="class">🖨️ Classroom</button>
@@ -751,6 +752,33 @@
       <div id="verbPlay" style="display:none;"></div>
     </div>
 
+    <!-- ==================== ADVERBS ==================== -->
+    <div class="page" id="page-adverbs">
+      <h2><span class="emoji">💨</span> Adverbs — Level Adventure</h2>
+      <div id="advHome">
+        <div class="info-box pink"><span class="label">🎯 Your Mission</span>An <strong>Adverb</strong> adds more meaning to a <strong>verb</strong>, an <strong>adjective</strong>, or another <strong>adverb</strong>. <em>Rama runs <strong>quickly</strong>. A <strong>very</strong> sweet mango.</em> Clear all <strong>8 levels</strong> to become an <strong>Adverb Ace</strong>! 👑 Tap <strong>💡 Hint</strong> if stuck.</div>
+        <div style="text-align:center;margin:10px 0;">
+          <button class="btn btn-small btn-success" onclick="toggleAdvLearn()">📖 Learn Adverbs</button>
+        </div>
+        <div class="concept-card" id="advLearn" style="display:none;">
+          <h3>📖 Adverbs — Quick Guide</h3>
+          <p>An <b>Adverb</b> modifies (tells more about) a <b>verb</b>, an <b>adjective</b>, or another <b>adverb</b>.</p>
+          <p style="margin-top:8px;"><b>Kinds of adverbs:</b></p>
+          <ul style="margin:6px 0 0 18px;line-height:1.8;">
+            <li>🎭 <b>Manner</b> — how? (runs <i>quickly</i>, fought <i>bravely</i>)</li>
+            <li>⏰ <b>Time</b> — when? (<i>now</i>, <i>soon</i>, <i>yesterday</i>)</li>
+            <li>📍 <b>Place</b> — where? (<i>here</i>, <i>there</i>, <i>everywhere</i>)</li>
+            <li>🔁 <b>Frequency</b> — how often? (<i>always</i>, <i>often</i>, <i>never</i>)</li>
+            <li>🎚️ <b>Degree</b> — how much? (<i>very</i>, <i>too</i>, <i>quite</i>)</li>
+          </ul>
+          <p style="margin-top:10px;"><b>Question adverbs</b> ask: when? where? why? how? <b>Relative adverbs</b> (where/when/why) point back to a noun: the house <i>where</i> I was born.</p>
+          <p style="margin-top:10px;"><b>Forming &amp; comparing:</b> most manner adverbs add <b>-ly</b> (quick → quickly). Compare: fast → faster → fastest; swiftly → more swiftly → most swiftly; well → better → best.</p>
+        </div>
+        <div class="level-map" id="advMap"></div>
+      </div>
+      <div id="advPlay" style="display:none;"></div>
+    </div>
+
     <!-- ==================== ARCADE ==================== -->
     <div class="page" id="page-arcade">
       <h2><span class="emoji">🕹️</span> Arcade Games</h2>
@@ -871,6 +899,7 @@ const STATE = {
   art: { unlocked: 1, stars: {} },
   pron: { unlocked: 1, stars: {} },
   verb: { unlocked: 1, stars: {} },
+  adv: { unlocked: 1, stars: {} },
 };
 
 function loadState() {
@@ -2570,6 +2599,176 @@ function finishVerbLevel() {
 }
 
 // ============================================================
+// ADVERBS — 8-LEVEL ADVENTURE (with hints)
+// ============================================================
+const ADV_LEVELS = [
+  { icon:'💨', short:'What is it?', title:'What is an Adverb?',
+    concept:'An <b>Adverb</b> adds meaning to (modifies) a <b>verb</b>, an <b>adjective</b>, or another <b>adverb</b>. <em>Rama runs <b>quickly</b> · a <b>very</b> sweet mango · reads <b>quite</b> clearly.</em>',
+    eg:'quickly · very · quite · well · soon',
+    questions:[
+      { q:'Find the adverb: "Rama runs quickly."', options:['Rama','runs','quickly'], answer:2, hint:'Which word tells HOW he runs?', explain:'"quickly" modifies the verb "runs".' },
+      { q:'"This is a very sweet mango." Which word does "very" tell us about?', options:['mango','sweet','is'], answer:1, hint:'How sweet? → very sweet.', explain:'"very" modifies the adjective "sweet".' },
+      { q:'"Govind reads quite clearly." "quite" tells us about...', options:['Govind','reads','clearly'], answer:2, hint:'It modifies another adverb.', explain:'"quite" modifies the adverb "clearly".' },
+      { q:'An adverb can modify a verb, an adjective, or...', options:['a noun','another adverb','an article','a pronoun'], answer:1, hint:'Three things it can modify.', explain:'verb, adjective, or another adverb.' },
+      { q:'Find the adverb: "She sings sweetly."', options:['She','sings','sweetly'], answer:2, hint:'How does she sing?', explain:'"sweetly" is the adverb.' },
+      { q:'Which word is an adverb?', options:['quickly','happy','run','dog'], answer:0, hint:'Which tells HOW something is done?', explain:'"quickly" is an adverb.' },
+    ]},
+  { icon:'🎭', short:'Manner', title:'Adverbs of Manner (How?)',
+    concept:'Adverbs of <b>Manner</b> show <b>how</b> something is done. Many are made from adjectives by adding <b>-ly</b> (quick → quickly). <em>clearly, bravely, well, hard, soundly.</em>',
+    eg:'fought bravely · slept soundly · works hard',
+    questions:[
+      { q:'Find the adverb of manner: "The Sikhs fought bravely."', options:['Sikhs','fought','bravely'], answer:2, hint:'How did they fight?', explain:'"bravely" = how.' },
+      { q:'Find the adverb of manner: "The child slept soundly."', options:['child','slept','soundly'], answer:2, hint:'How did the child sleep?', explain:'"soundly".' },
+      { q:'Make an adverb from the adjective "quick".', options:['quickly','quicker','quickness','quickest'], answer:0, hint:'Add -ly.', explain:'quick → quickly.' },
+      { q:'Make an adverb from the adjective "happy".', options:['happyly','happily','happely','happyly'], answer:1, hint:'y → i, then add -ly.', explain:'happy → happily.' },
+      { q:'"The boy works hard." "hard" tells us...', options:['when he works','how he works','where he works'], answer:1, hint:'In what manner?', explain:'how → manner.' },
+      { q:'Adverbs of Manner answer which question?', options:['When?','Where?','How?','How often?'], answer:2, hint:'Manner = the way it is done.', explain:'Manner = How?' },
+    ]},
+  { icon:'⏰', short:'Time', title:'Adverbs of Time (When?)',
+    concept:'Adverbs of <b>Time</b> show <b>when</b> something happens. <em>now, soon, yesterday, already, daily, late, before, today.</em>',
+    eg:'I hurt my knee yesterday · the end soon came',
+    questions:[
+      { q:'Find the adverb of time: "I hurt my knee yesterday."', options:['hurt','knee','yesterday'], answer:2, hint:'When did it happen?', explain:'"yesterday" = when.' },
+      { q:'Find the adverb of time: "We shall now begin."', options:['shall','now','begin'], answer:1, hint:'When will we begin?', explain:'"now".' },
+      { q:'Find the adverb of time: "He comes here daily."', options:['comes','here','daily'], answer:2, hint:'How regularly in time?', explain:'"daily" = when/how regularly.' },
+      { q:'Find the adverb of time: "The end soon came."', options:['end','soon','came'], answer:1, hint:'When did it come?', explain:'"soon".' },
+      { q:'Adverbs of Time answer which question?', options:['How?','When?','Where?','How much?'], answer:1, hint:'Time = the moment.', explain:'Time = When?' },
+      { q:'Find the adverb of time: "I have spoken to him already."', options:['spoken','him','already'], answer:2, hint:'When?', explain:'"already".' },
+    ]},
+  { icon:'📍', short:'Place', title:'Adverbs of Place (Where?)',
+    concept:'Adverbs of <b>Place</b> show <b>where</b> something happens. <em>here, there, everywhere, out, in, away, up, backward.</em>',
+    eg:'Stand here · galloped away · looked up',
+    questions:[
+      { q:'Find the adverb of place: "Stand here."', options:['Stand','here'], answer:1, hint:'Where to stand?', explain:'"here" = where.' },
+      { q:'Find the adverb of place: "The horse galloped away."', options:['horse','galloped','away'], answer:2, hint:'Galloped to where?', explain:'"away".' },
+      { q:'Find the adverb of place: "Mary\'s lamb followed her everywhere."', options:['followed','her','everywhere'], answer:2, hint:'Followed to where?', explain:'"everywhere".' },
+      { q:'Find the adverb of place: "My brother is out."', options:['brother','is','out'], answer:2, hint:'Where is he?', explain:'"out".' },
+      { q:'Adverbs of Place answer which question?', options:['When?','Where?','How?','Why?'], answer:1, hint:'Place = the spot.', explain:'Place = Where?' },
+      { q:'Find the adverb of place: "He looked up."', options:['He','looked','up'], answer:2, hint:'Looked in which direction?', explain:'"up".' },
+    ]},
+  { icon:'🔁', short:'Frequency', title:'Adverbs of Frequency (How often?)',
+    concept:'Adverbs of <b>Frequency</b> show <b>how often</b> something happens. <em>always, often, never, seldom, again, twice, frequently, daily.</em>',
+    eg:'He often makes mistakes · he seldom comes here',
+    questions:[
+      { q:'Find the adverb: "He often makes mistakes."', options:['He','often','makes'], answer:1, hint:'How often?', explain:'"often".' },
+      { q:'Find the adverb: "He always tries his best."', options:['always','tries','best'], answer:0, hint:'How often does he try?', explain:'"always".' },
+      { q:'Find the adverb: "He seldom comes here."', options:['seldom','comes','here'], answer:0, hint:'How often (rarely)?', explain:'"seldom".' },
+      { q:'Find the adverb: "I have told you twice."', options:['told','you','twice'], answer:2, hint:'How many times?', explain:'"twice".' },
+      { q:'Adverbs of Frequency answer which question?', options:['How?','Where?','How often?','How much?'], answer:2, hint:'How many times / how regularly.', explain:'Frequency = How often?' },
+      { q:'Find the adverb: "The postman called again."', options:['postman','called','again'], answer:2, hint:'Once more = how often.', explain:'"again".' },
+    ]},
+  { icon:'🎚️', short:'Degree', title:'Adverbs of Degree (How much?)',
+    concept:'Adverbs of <b>Degree</b> show <b>how much</b> or to what extent. <em>very, too, quite, almost, so, rather, enough, fully.</em>',
+    eg:'very stormy · too careless · almost ripe',
+    questions:[
+      { q:'Find the adverb of degree: "The sea is very stormy."', options:['sea','very','stormy'], answer:1, hint:'How stormy?', explain:'"very" = how much.' },
+      { q:'Find the adverb of degree: "He was too careless."', options:['was','too','careless'], answer:1, hint:'How careless?', explain:'"too".' },
+      { q:'Find the adverb of degree: "These mangoes are almost ripe."', options:['mangoes','almost','ripe'], answer:1, hint:'To what extent ripe?', explain:'"almost".' },
+      { q:'Find the adverb of degree: "You are quite wrong."', options:['You','quite','wrong'], answer:1, hint:'How wrong?', explain:'"quite".' },
+      { q:'Adverbs of Degree answer which question?', options:['When?','How much / how far?','Where?','How often?'], answer:1, hint:'The extent or amount.', explain:'Degree = How much?' },
+      { q:'Find the adverb of degree: "I am so glad."', options:['I','so','glad'], answer:1, hint:'How glad?', explain:'"so".' },
+    ]},
+  { icon:'❓', short:'Question/Rel', title:'Question & Relative Adverbs',
+    concept:'<b>Interrogative</b> adverbs ask questions: <b>when? where? why? how?</b> <b>Relative</b> adverbs (where, when, why) point back to a noun: <em>the house <b>where</b> I was born.</em>',
+    eg:'Why are you late? · the time when the train arrives',
+    questions:[
+      { q:'"___ are you late?" (asking the reason)', options:['Where','When','Why','How'], answer:2, hint:'Asking the reason.', explain:'Why = reason.' },
+      { q:'"___ do you live?" (asking the place)', options:['When','Where','Why','How'], answer:1, hint:'Asking the place.', explain:'Where = place.' },
+      { q:'"___ did you arrive?" (asking the time)', options:['When','Where','Why','How'], answer:0, hint:'Asking the time.', explain:'When = time.' },
+      { q:'"This is the house ___ I was born."', options:['why','when','where','how'], answer:2, hint:'Refers back to "house" (a place).', explain:'where → place.' },
+      { q:'"Do you know the time ___ the train arrives?"', options:['where','when','why','how'], answer:1, hint:'Refers back to "time".', explain:'when → time.' },
+      { q:'An adverb used to ask a question is called a/an...', options:['Relative adverb','Interrogative adverb','Simple adverb','Cognate adverb'], answer:1, hint:'It introduces a question.', explain:'Interrogative adverb.' },
+    ]},
+  { icon:'👑', short:'BOSS', title:'Boss — Compare & Classify',
+    concept:'Some adverbs compare like adjectives: <b>fast → faster → fastest</b>. Adverbs ending in -ly use <b>more / most</b> (swiftly → more swiftly). Irregular: <b>well → better → best</b>, badly → worse → worst. Pass to become an <b>Adverb Ace</b>! 👑',
+    eg:'Rama ran fast · Arjun ran faster · Hari ran fastest',
+    questions:[
+      { q:'Comparative of "fast"?', options:['faster','fastest','more fast','fastly'], answer:0, hint:'Short word → add -er.', explain:'fast → faster.' },
+      { q:'Superlative of "fast"?', options:['faster','fastest','most fast','fastly'], answer:1, hint:'Short word → add -est.', explain:'fast → fastest.' },
+      { q:'Comparative of "swiftly"?', options:['swiftlier','more swiftly','swiftlyer','swiftest'], answer:1, hint:'-ly adverb → use "more".', explain:'more swiftly.' },
+      { q:'"Rama writes well. Arjun writes ___ than Rama."', options:['weller','more well','better','best'], answer:2, hint:'Irregular: well → better.', explain:'better.' },
+      { q:'Superlative of "badly"?', options:['baddest','worse','worst','most badly'], answer:2, hint:'Irregular: badly → worse → worst.', explain:'worst.' },
+      { q:'"Hari ran ___ of all." (fast)', options:['faster','fast','fastest','more fast'], answer:2, hint:'Comparing 3+ → superlative.', explain:'fastest.' },
+      { q:'Classify: "He arrived late." — "late" is an adverb of...', options:['Manner','Time','Place','Degree'], answer:1, hint:'When did he arrive?', explain:'Time.' },
+      { q:'Classify: "She fought bravely." — "bravely" is an adverb of...', options:['Manner','Time','Place','Degree'], answer:0, hint:'How did she fight?', explain:'Manner.' },
+      { q:'Classify: "Stand there." — "there" is an adverb of...', options:['Manner','Time','Place','Degree'], answer:2, hint:'Where?', explain:'Place.' },
+      { q:'Classify: "He is very tall." — "very" is an adverb of...', options:['Manner','Time','Place','Degree'], answer:3, hint:'How much / how tall?', explain:'Degree.' },
+    ]},
+];
+
+let advState = null;
+function renderAdvMap() {
+  const map = document.getElementById('advMap'); if (!map) return;
+  const unlocked = STATE.adv.unlocked || 1;
+  map.innerHTML = ADV_LEVELS.map((lv, i) => {
+    const n = i + 1, best = STATE.adv.stars[n] || 0;
+    let cls = best > 0 ? 'done' : (n <= unlocked ? 'unlocked' : 'locked');
+    const stars = best > 0 ? '⭐'.repeat(best) + '☆'.repeat(3 - best) : (cls === 'locked' ? '🔒' : '• • •');
+    const lock = cls === 'locked' ? '<span class="lock-ic">🔒</span>' : '';
+    const click = cls === 'locked' ? '' : `onclick="openAdvLevel(${n})"`;
+    return `<div class="level-node ${cls}" ${click}>${lock}<span class="lvl-num">${lv.icon}</span><span class="lvl-name">${n}. ${lv.short}</span><span class="lvl-stars">${stars}</span></div>`;
+  }).join('');
+}
+function toggleAdvLearn() {
+  const el = document.getElementById('advLearn');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+function advBackToMap() {
+  document.getElementById('advPlay').style.display = 'none';
+  document.getElementById('advHome').style.display = 'block';
+  renderAdvMap();
+}
+function openAdvLevel(n) {
+  const lv = ADV_LEVELS[n - 1]; if (!lv) return;
+  document.getElementById('advHome').style.display = 'none';
+  const play = document.getElementById('advPlay'); play.style.display = 'block';
+  advState = { level:n, qIndex:0, correct:0, total:lv.questions.length, answered:false };
+  play.innerHTML = `
+    <div class="game-hud"><button class="back-btn" onclick="advBackToMap()">← Map</button><span class="hud-target">${lv.icon} Level ${n}: ${lv.title}</span></div>
+    <div class="concept-card"><h3>${lv.icon} ${lv.title}</h3><p>${lv.concept}</p>${lv.eg ? `<div class="eg">${lv.eg}</div>` : ''}</div>
+    <div id="advQ"></div>`;
+  speak(lv.title + '. ' + lv.concept.replace(/<[^>]+>/g, ''));
+  renderAdvQ();
+}
+function renderAdvQ() {
+  const lv = ADV_LEVELS[advState.level - 1], i = advState.qIndex;
+  if (i >= lv.questions.length) { finishAdvLevel(); return; }
+  advState.answered = false;
+  const q = lv.questions[i];
+  const opts = q.options.map((o, idx) => `<button class="option-btn" data-idx="${idx}" onclick="answerAdv2(${idx})">${o}</button>`).join('');
+  const hintBtn = q.hint ? `<div style="margin-top:10px;"><button class="btn btn-small btn-hint" onclick="showAdvHint()">💡 Hint</button></div><div class="hint-box" id="advHint" style="display:none;"></div>` : '';
+  document.getElementById('advQ').innerHTML = `<div class="exercise-card"><div class="q">${q.q}</div><div class="options">${opts}</div>${hintBtn}<div class="feedback" id="advFb"></div><div style="margin-top:12px;text-align:right;"><span style="color:var(--text-muted);font-size:0.85rem;">Question ${i + 1}/${lv.questions.length}</span><div class="progress-bar"><div class="fill" style="width:${(i / lv.questions.length) * 100}%;"></div></div></div></div>`;
+}
+function showAdvHint() {
+  const q = ADV_LEVELS[advState.level - 1].questions[advState.qIndex];
+  const box = document.getElementById('advHint');
+  if (box && q.hint) { box.textContent = '💡 ' + q.hint; box.style.display = 'block'; }
+}
+function answerAdv2(idx) {
+  if (advState.answered) return; advState.answered = true;
+  const lv = ADV_LEVELS[advState.level - 1], q = lv.questions[advState.qIndex], correct = q.answer;
+  const fb = document.getElementById('advFb');
+  document.querySelectorAll('#advQ .option-btn').forEach(b => { b.disabled = true; const bi = parseInt(b.dataset.idx); if (bi === correct) b.classList.add('correct'); else if (bi === idx && idx !== correct) b.classList.add('wrong'); });
+  if (idx === correct) { fb.className = 'feedback correct show'; fb.textContent = '✅ Correct! ' + (q.explain || ''); advState.correct++; addStar(); fireConfetti(8); checkBadges(); }
+  else { fb.className = 'feedback wrong show'; fb.textContent = '❌ ' + (q.explain || ('Answer: ' + q.options[correct])); addWrong(); }
+  advState.qIndex++; saveState(); setTimeout(renderAdvQ, 1200);
+}
+function finishAdvLevel() {
+  const n = advState.level, pct = Math.round((advState.correct / advState.total) * 100), stars = adjStars(pct);
+  if (stars > (STATE.adv.stars[n] || 0)) STATE.adv.stars[n] = stars;
+  const passed = stars >= 1;
+  if (passed && n < 8 && (STATE.adv.unlocked || 1) < n + 1) STATE.adv.unlocked = n + 1;
+  saveState();
+  const starRow = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  let next = '';
+  if (passed && n < 8) next = `<button class="btn btn-primary" onclick="openAdvLevel(${n + 1})">▶️ Next Level</button> `;
+  else if (!passed) next = `<button class="btn btn-primary" onclick="openAdvLevel(${n})">🔄 Try Again</button> `;
+  const boss = (passed && n === 8) ? '<p style="color:var(--accent);font-weight:800;font-size:1.1rem;margin-top:6px;">👑 You are an ADVERB ACE!</p>' : '';
+  document.getElementById('advPlay').innerHTML = `<div class="result-box"><div class="big">${passed ? (n === 8 ? '👑' : '🎉') : '💪'}</div><div class="score-text">Level ${n} ${passed ? 'Complete!' : '— Try again!'}</div><div style="font-size:1.9rem;margin:6px 0;">${starRow}</div><p>You got <strong>${advState.correct}</strong>/<strong>${advState.total}</strong> (${pct}%)</p>${boss}<p style="color:var(--text-muted);font-size:0.85rem;">${passed ? 'Tip: score 90%+ for all 3 stars!' : 'Get at least half right to unlock the next level.'}</p><div style="margin-top:14px;">${next}<button class="btn btn-small btn-success" onclick="advBackToMap()">🗺️ Level Map</button></div></div>`;
+  if (passed) { fireConfetti(stars >= 3 ? 40 : 20); playFanfare(); if (stars >= 3) showStarBurst(); }
+}
+
+// ============================================================
 // RESET
 // ============================================================
 function resetProgress() {
@@ -2582,9 +2781,10 @@ function resetProgress() {
   STATE.art = { unlocked: 1, stars: {} };
   STATE.pron = { unlocked: 1, stars: {} };
   STATE.verb = { unlocked: 1, stars: {} };
+  STATE.adv = { unlocked: 1, stars: {} };
   saveState(); updateUI();
   resetCP(); resetColl(); resetAbs(); resetGender(); resetNum(); resetCount();
-  adjBackToMap(); artBackToMap(); pronBackToMap(); verbBackToMap();
+  adjBackToMap(); artBackToMap(); pronBackToMap(); verbBackToMap(); advBackToMap();
   document.getElementById('quizArea').innerHTML = `<div style="text-align:center;padding:30px 0;color:var(--text-muted);"><span style="font-size:3rem;">🎮</span><p style="margin-top:10px;">Pick a game above to start playing!</p></div>`;
 }
 
@@ -2630,7 +2830,8 @@ if (!STATE.adj) STATE.adj = { unlocked: 1, stars: {} };
 if (!STATE.art) STATE.art = { unlocked: 1, stars: {} };
 if (!STATE.pron) STATE.pron = { unlocked: 1, stars: {} };
 if (!STATE.verb) STATE.verb = { unlocked: 1, stars: {} };
-renderAdjMap(); renderArtMap(); renderPronMap(); renderVerbMap();
+if (!STATE.adv) STATE.adv = { unlocked: 1, stars: {} };
+renderAdjMap(); renderArtMap(); renderPronMap(); renderVerbMap(); renderAdvMap();
 
 // Sync sound + grade controls with saved state
 document.getElementById('soundIcon').textContent = STATE.soundOn ? '🔊' : '🔇';
