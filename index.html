@@ -214,6 +214,23 @@
     @keyframes matchPulse { 0%,100%{transform:rotateY(180deg) scale(1)} 50%{transform:rotateY(180deg) scale(1.08)} }
     @media (max-width:600px){ .memory-grid{grid-template-columns:repeat(4,1fr);gap:6px;} .mem-face{font-size:0.8rem;} .mem-front{font-size:1.2rem;} }
 
+    /* ===== Adjective level map ===== */
+    .level-map { display:grid; grid-template-columns:repeat(auto-fill,minmax(98px,1fr)); gap:14px; margin:16px 0; }
+    .level-node { position:relative; aspect-ratio:1; border-radius:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; text-align:center; padding:6px; transition:all 0.25s; border:2px solid rgba(255,255,255,0.08); }
+    .level-node .lvl-num { font-size:1.7rem; line-height:1; }
+    .level-node .lvl-name { font-size:0.6rem; font-weight:700; line-height:1.15; margin-top:4px; color:var(--text-muted); }
+    .level-node .lvl-stars { font-size:0.68rem; margin-top:4px; letter-spacing:1px; color:var(--accent); }
+    .level-node .lock-ic { position:absolute; top:5px; right:7px; font-size:0.8rem; }
+    .level-node.locked { background:rgba(255,255,255,0.03); opacity:0.5; cursor:not-allowed; }
+    .level-node.unlocked { background:linear-gradient(135deg,rgba(108,99,255,0.28),rgba(77,150,255,0.16)); border-color:rgba(108,99,255,0.4); }
+    .level-node.done { background:linear-gradient(135deg,rgba(107,203,119,0.28),rgba(255,217,61,0.14)); border-color:var(--green); }
+    .level-node:not(.locked):hover { transform:translateY(-3px); box-shadow:0 8px 22px rgba(108,99,255,0.3); }
+    .concept-card { background:rgba(108,99,255,0.1); border:1px solid rgba(108,99,255,0.25); border-radius:16px; padding:16px 18px; margin-bottom:14px; }
+    .concept-card h3 { color:var(--accent); font-size:1.12rem; margin-bottom:6px; }
+    .concept-card p, .concept-card li { color:var(--text); font-size:0.95rem; line-height:1.6; }
+    .concept-card .eg { color:var(--text-muted); font-size:0.88rem; margin-top:8px; font-style:italic; }
+    .concept-card b { color:#fff; }
+
     .text-input { padding:11px 16px; border-radius:30px; border:2px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.05); color:var(--text); font-size:0.95rem; font-family:inherit; min-width:200px; flex:1; }
     .text-input:focus { outline:none; border-color:var(--primary); background:rgba(108,99,255,0.08); }
     .text-input::placeholder { color:var(--text-muted); }
@@ -243,7 +260,7 @@
 <div class="app">
   <div class="header">
     <h1>🌟 Noun Ninjas</h1>
-    <div class="subtitle">Grammar Adventure for Classes 1–5</div>
+    <div class="subtitle">Nouns &amp; Adjectives — Grammar Adventure for Classes 1–5</div>
   </div>
 
   <div class="controls-bar">
@@ -288,6 +305,7 @@
     <button class="tab-btn" data-tab="gender">⚤ Gender</button>
     <button class="tab-btn" data-tab="number">🔢 Number</button>
     <button class="tab-btn" data-tab="countable">📦 Countable/Uncountable</button>
+    <button class="tab-btn" data-tab="adjectives">🎨 Adjectives</button>
     <button class="tab-btn" data-tab="arcade">🕹️ Arcade</button>
     <button class="tab-btn" data-tab="quiz">🎮 Quiz Games</button>
     <button class="tab-btn" data-tab="class">🖨️ Classroom</button>
@@ -626,6 +644,33 @@
       </div>
     </div>
 
+    <!-- ==================== ADJECTIVES ==================== -->
+    <div class="page" id="page-adjectives">
+      <h2><span class="emoji">🎨</span> The Adjective — Level Adventure</h2>
+      <div id="adjHome">
+        <div class="info-box pink"><span class="label">🎯 Your Mission</span>An <strong>Adjective</strong> is a word added to a noun to <strong>describe</strong> it, <strong>point it out</strong>, or tell <strong>how many / how much</strong>. Clear all <strong>10 levels</strong> to become an <strong>Adjective Master</strong>! 👑</div>
+        <div style="text-align:center;margin:10px 0;">
+          <button class="btn btn-small btn-success" onclick="toggleAdjLearn()">📖 Learn Adjectives</button>
+        </div>
+        <div class="concept-card" id="adjLearn" style="display:none;">
+          <h3>📖 Adjectives — Quick Guide</h3>
+          <p><b>Adjective</b> = a word added to a noun to describe it, point it out, or tell how many / how much.</p>
+          <p style="margin-top:8px;"><b>5 Kinds of Adjectives:</b></p>
+          <ul style="margin:6px 0 0 18px;line-height:1.8;">
+            <li>🎨 <b>Quality</b> — of what kind? (a <i>large</i> city)</li>
+            <li>⚖️ <b>Quantity</b> — how much? (<i>some</i> rice)</li>
+            <li>🔢 <b>Number</b> — how many? (<i>five</i> boys, the <i>first</i> day, <i>each</i> man)</li>
+            <li>👉 <b>Demonstrative</b> — which? (<i>this, that, these, those</i>)</li>
+            <li>❓ <b>Interrogative</b> — asks a question (<i>what, which, whose</i>)</li>
+          </ul>
+          <p style="margin-top:10px;"><b>How they are used:</b> <i>Attributive</i> = before the noun (the <i>lazy</i> boy). <i>Predicative</i> = after a verb like <i>is</i> (the boy is <i>lazy</i>).</p>
+          <p style="margin-top:10px;"><b>Comparison (3 degrees):</b> Positive → Comparative → Superlative — <i>sweet → sweeter → sweetest</i>. Long words use <i>more / most</i>. Irregular: <i>good → better → best</i>, <i>bad → worse → worst</i>.</p>
+        </div>
+        <div class="level-map" id="adjMap"></div>
+      </div>
+      <div id="adjPlay" style="display:none;"></div>
+    </div>
+
     <!-- ==================== ARCADE ==================== -->
     <div class="page" id="page-arcade">
       <h2><span class="emoji">🕹️</span> Arcade Games</h2>
@@ -742,6 +787,7 @@ const STATE = {
   badges: { badge1: false, badge2: false, badge3: false, badge4: false, badge5: false },
   cpIndex: 0, collIndex: 0, absIndex: 0, countIndex: 0, genderIndex: 0, numIndex: 0,
   soundOn: true, grade: 'senior', voiceURI: '', rate: 0.9,
+  adj: { unlocked: 1, stars: {} },
 };
 
 function loadState() {
@@ -1699,6 +1745,195 @@ function generateCertificate() {
 }
 
 // ============================================================
+// ADJECTIVES — 10-LEVEL ADVENTURE
+// ============================================================
+const ADJ_LEVELS = [
+  { icon:'🔍', short:'What is it?', title:'What is an Adjective?',
+    concept:'An <b>Adjective</b> is a word added to a noun to <b>describe</b> it, <b>point it out</b>, or tell <b>how many / how much</b>. ("Adjective" means "added to".)',
+    eg:'e.g. a <b>clever</b> girl · <b>five</b> mangoes · <b>that</b> boy',
+    questions:[
+      { q:'Find the adjective: "Sita is a clever girl."', options:['Sita','clever','girl','is'], answer:1, explain:'"clever" describes the girl.' },
+      { q:'Find the adjective: "He gave me five mangoes."', options:['He','gave','five','mangoes'], answer:2, explain:'"five" tells how many mangoes.' },
+      { q:'Find the adjective: "The lazy boy was punished."', options:['The','lazy','boy','punished'], answer:1, explain:'"lazy" describes the boy.' },
+      { q:'Find the adjective: "Kolkata is a large city."', options:['Kolkata','is','large','city'], answer:2, explain:'"large" describes the city.' },
+      { q:'Find the adjective: "He is an honest man."', options:['He','is','honest','man'], answer:2, explain:'"honest" describes the man.' },
+      { q:'Find the adjective: "There are no pictures here."', options:['There','no','pictures','here'], answer:1, explain:'"no" tells how many pictures.' },
+    ]},
+  { icon:'🎨', short:'Quality', title:'Adjectives of Quality',
+    concept:'Adjectives of <b>Quality</b> show the <b>kind</b> of a person or thing. They answer: <b>Of what kind?</b>',
+    eg:'e.g. a <b>large</b> city · an <b>honest</b> man · <b>French</b> wine',
+    questions:[
+      { q:'Which is an Adjective of Quality?', options:['large','this','five','some'], answer:0, explain:'"large" tells what kind.' },
+      { q:'Find the quality adjective: "He is an honest man."', options:['He','honest','man','is'], answer:1, explain:'"honest" = of what kind.' },
+      { q:'Find the quality adjective: "The foolish crow sang."', options:['The','foolish','crow','sang'], answer:1, explain:'"foolish" tells the kind of crow.' },
+      { q:'Which is a quality adjective?', options:['brave','two','those','much'], answer:0, explain:'"brave" shows a quality.' },
+      { q:'"A populous city." Which word is the adjective?', options:['A','populous','city','is'], answer:1, explain:'"populous" describes the city.' },
+      { q:'Adjectives of Quality answer which question?', options:['How many?','Of what kind?','Which?','How much?'], answer:1, explain:'Quality = Of what kind?' },
+    ]},
+  { icon:'⚖️', short:'Quantity', title:'Adjectives of Quantity',
+    concept:'Adjectives of <b>Quantity</b> show <b>how much</b> of a thing is meant. They answer: <b>How much?</b>',
+    eg:'e.g. <b>some</b> rice · <b>much</b> patience · <b>little</b> time · <b>enough</b> food',
+    questions:[
+      { q:'Find the adjective of quantity: "I ate some rice."', options:['I','ate','some','rice'], answer:2, explain:'"some" = how much rice.' },
+      { q:'Find it: "He showed much patience."', options:['He','showed','much','patience'], answer:2, explain:'"much" = how much patience.' },
+      { q:'Which is an Adjective of Quantity?', options:['five','little','this','clever'], answer:1, explain:'"little" tells how much.' },
+      { q:'Find it: "Take great care of your health."', options:['Take','great','care','health'], answer:1, explain:'"great" = how much care.' },
+      { q:'Find it: "The whole sum was spent."', options:['The','whole','sum','spent'], answer:1, explain:'"whole" = how much of the sum.' },
+      { q:'Adjectives of Quantity answer which question?', options:['How much?','How many?','Which?','Whose?'], answer:0, explain:'Quantity = How much?' },
+    ]},
+  { icon:'🔢', short:'Number', title:'Adjectives of Number',
+    concept:'Adjectives of <b>Number</b> show <b>how many</b>, or in what <b>order</b>. They answer: <b>How many?</b> (one, two = cardinals; first, second = ordinals; many, few, all = indefinite; each, every = distributive).',
+    eg:'e.g. <b>five</b> fingers · the <b>first</b> day · <b>every</b> man',
+    questions:[
+      { q:'Find the number adjective: "The hand has five fingers."', options:['hand','has','five','fingers'], answer:2, explain:'"five" = how many fingers.' },
+      { q:'Find it: "Few cats like cold water."', options:['Few','cats','cold','water'], answer:0, explain:'"Few" tells how many cats.' },
+      { q:'"Sunday is the first day." "first" is a...', options:['Cardinal (counts)','Ordinal (order)','Quality','Quantity'], answer:1, explain:'"first" shows order → Ordinal.' },
+      { q:'Find the distributive: "Every dog has his day."', options:['Every','dog','his','day'], answer:0, explain:'"Every" refers to each one → distributive.' },
+      { q:'Which is a Numeral Adjective?', options:['honest','many','much','large'], answer:1, explain:'"many" tells how many.' },
+      { q:'Find it: "There are several mistakes."', options:['There','are','several','mistakes'], answer:2, explain:'"several" tells how many.' },
+    ]},
+  { icon:'👉', short:'Demonstr.', title:'Demonstrative Adjectives',
+    concept:'<b>Demonstrative</b> adjectives <b>point out</b> which one is meant: <b>this, that, these, those, such, yonder</b>. They answer: <b>Which?</b> (this/that = singular; these/those = plural).',
+    eg:'e.g. <b>this</b> boy · <b>these</b> mangoes · <b>that</b> fort',
+    questions:[
+      { q:'Find the demonstrative: "That boy is industrious."', options:['That','boy','is','industrious'], answer:0, explain:'"That" points out which boy.' },
+      { q:'Find it: "These mangoes are sour."', options:['These','mangoes','are','sour'], answer:0, explain:'"These" points out which mangoes.' },
+      { q:'Which words go with a SINGULAR noun?', options:['these / those','this / that','many / few','some / any'], answer:1, explain:'this/that = singular; these/those = plural.' },
+      { q:'Choose the right word: "____ boys play." (plural, far away)', options:['This','That','Those','Such'], answer:2, explain:'"Those" = plural + distant.' },
+      { q:'Find the demonstrative: "I hate such things."', options:['I','hate','such','things'], answer:2, explain:'"such" points out the kind meant.' },
+      { q:'Demonstrative adjectives answer which question?', options:['How many?','Which?','How much?','Whose?'], answer:1, explain:'Demonstrative = Which?' },
+    ]},
+  { icon:'❓', short:'Interrog.', title:'Interrogative Adjectives',
+    concept:'<b>Interrogative</b> adjectives are used with nouns to <b>ask questions</b>: <b>what, which, whose</b>.',
+    eg:'e.g. <b>Whose</b> book? · <b>Which</b> way? · <b>What</b> time?',
+    questions:[
+      { q:'Find the interrogative adjective: "Whose book is this?"', options:['Whose','book','is','this'], answer:0, explain:'"Whose" asks about the noun "book".' },
+      { q:'Find it: "Which way shall we go?"', options:['Which','way','shall','go'], answer:0, explain:'"Which" asks about "way".' },
+      { q:'Find it: "What manner of man is he?"', options:['What','manner','man','he'], answer:0, explain:'"What" asks about "manner".' },
+      { q:'Which is an interrogative adjective?', options:['what','that','five','large'], answer:0, explain:'"what" can ask a question with a noun.' },
+      { q:'Find it: "Which pen do you prefer?"', options:['Which','pen','you','prefer'], answer:0, explain:'"Which" asks about "pen".' },
+      { q:'The three interrogative adjectives are...', options:['this, that, these','what, which, whose','some, any, no','each, every, either'], answer:1, explain:'what, which, whose.' },
+    ]},
+  { icon:'🪄', short:'Attrib/Pred', title:'Attributive or Predicative',
+    concept:'An adjective is <b>Attributive</b> when it comes <b>before</b> the noun (the <b>lazy</b> boy). It is <b>Predicative</b> when it comes <b>after</b> a verb like is/am/seems (the boy <b>is lazy</b>).',
+    eg:'Attributive: a <b>red</b> car · Predicative: the car is <b>red</b>',
+    questions:[
+      { q:'"The lazy boy was punished." — "lazy" is used...', options:['Attributively (before noun)','Predicatively (after verb)'], answer:0, explain:'"lazy" comes before the noun "boy".' },
+      { q:'"The boy is lazy." — "lazy" is used...', options:['Attributively','Predicatively'], answer:1, explain:'"lazy" comes after the verb "is".' },
+      { q:'"She is afraid of ghosts." — "afraid" is...', options:['Attributive','Predicative'], answer:1, explain:'comes after "is" → predicative.' },
+      { q:'"A live ass is better than a dead lion." — "live" is...', options:['Attributive','Predicative'], answer:0, explain:'"live" comes before "ass".' },
+      { q:'"I am quite well." — "well" is...', options:['Attributive','Predicative'], answer:1, explain:'comes after "am" → predicative.' },
+      { q:'Which adjective is used attributively?', options:['the happy child','the child is happy','she is afraid','I am well'], answer:0, explain:'"happy" is before the noun "child".' },
+    ]},
+  { icon:'📊', short:'Degrees', title:'Degrees of Comparison',
+    concept:'Adjectives have three <b>degrees</b>: <b>Positive</b> (sweet), <b>Comparative</b> (sweeter — comparing 2), <b>Superlative</b> (sweetest — comparing 3 or more).',
+    eg:'tall → taller → tallest',
+    questions:[
+      { q:'"Rama\'s mango is sweet." — "sweet" is the...', options:['Positive degree','Comparative degree','Superlative degree'], answer:0, explain:'simple form = Positive.' },
+      { q:'"Hari\'s mango is sweeter." — "sweeter" is the...', options:['Positive','Comparative','Superlative'], answer:1, explain:'comparing two → Comparative.' },
+      { q:'"Govind\'s mango is the sweetest." — "sweetest" is...', options:['Positive','Comparative','Superlative'], answer:2, explain:'highest degree → Superlative.' },
+      { q:'"stronger" is which degree?', options:['Positive','Comparative','Superlative'], answer:1, explain:'-er → Comparative.' },
+      { q:'"tallest" is which degree?', options:['Positive','Comparative','Superlative'], answer:2, explain:'-est → Superlative.' },
+      { q:'The Comparative degree is used to compare...', options:['one thing','two things','three things','many things'], answer:1, explain:'Comparative compares two.' },
+    ]},
+  { icon:'🏗️', short:'Make forms', title:'Make the Comparative & Superlative',
+    concept:'Short words add <b>-er / -est</b> (tall→taller→tallest). Words ending in <b>y</b> change to <b>i</b> (happy→happier). Double the last letter after a short vowel (big→bigger). Long words use <b>more / most</b>. Some are <b>irregular</b> (good→better→best).',
+    eg:'fine→finer→finest · heavy→heavier→heaviest',
+    questions:[
+      { q:'Comparative of "tall"?', options:['taller','tallest','more tall','talls'], answer:0, explain:'short word → add -er.' },
+      { q:'Superlative of "big"?', options:['biger','bigest','biggest','most big'], answer:2, explain:'double the g, then -est.' },
+      { q:'Comparative of "happy"?', options:['happyer','happier','more happy','happiest'], answer:1, explain:'y → i, then -er.' },
+      { q:'Comparative of "beautiful"?', options:['beautifuler','more beautiful','beautifullest','beautifuller'], answer:1, explain:'long word → use "more".' },
+      { q:'Comparative of "good"?', options:['gooder','more good','better','best'], answer:2, explain:'irregular: good → better.' },
+      { q:'Superlative of "bad"?', options:['baddest','worse','worst','most bad'], answer:2, explain:'irregular: bad → worst.' },
+      { q:'Superlative of "fine"?', options:['finest','finer','most fine','fineest'], answer:0, explain:'ends in e → just add -st.' },
+      { q:'Comparative of "heavy"?', options:['heavyer','heavier','more heavy','heaviest'], answer:1, explain:'y → i, then -er.' },
+    ]},
+  { icon:'👑', short:'BOSS', title:'Boss Level — Adjective Master',
+    concept:'A mix of everything! Classify the adjective, name its kind, and pick the right degree. Pass to become an <b>Adjective Master</b>! 👑',
+    eg:'',
+    questions:[
+      { q:'"Iron is more useful than copper." — "more useful" is...', options:['Positive','Comparative','Superlative'], answer:1, explain:'comparing two → Comparative.' },
+      { q:'What kind of adjective is "five" in "five fingers"?', options:['Quality','Quantity','Number','Demonstrative'], answer:2, explain:'tells how many → Number.' },
+      { q:'What kind is "much" in "much patience"?', options:['Quality','Quantity','Number','Interrogative'], answer:1, explain:'how much → Quantity.' },
+      { q:'"He is the strongest." — "strongest" is...', options:['Positive','Comparative','Superlative'], answer:2, explain:'highest degree → Superlative.' },
+      { q:'What kind is "whose" in "Whose book?"', options:['Demonstrative','Interrogative','Number','Quality'], answer:1, explain:'asks a question → Interrogative.' },
+      { q:'What kind is "each" in "Each boy must wait."?', options:['Distributive Number','Quality','Quantity','Demonstrative'], answer:0, explain:'each one → Distributive Number.' },
+      { q:'Comparative of "merry"?', options:['merryer','merrier','more merry','merriest'], answer:1, explain:'y → i, then -er.' },
+      { q:'"This boy is stronger than that." — "stronger" is...', options:['Positive','Comparative','Superlative'], answer:1, explain:'comparing two → Comparative.' },
+      { q:'Superlative of "little" (amount)?', options:['littlest','less','least','more little'], answer:2, explain:'irregular: little → less → least.' },
+      { q:'"Solomon was one of the wisest men." — "wisest" is...', options:['Positive','Comparative','Superlative'], answer:2, explain:'-est → Superlative.' },
+    ]},
+];
+
+let adjState = null;
+function adjStars(pct) { return pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0; }
+function renderAdjMap() {
+  const map = document.getElementById('adjMap'); if (!map) return;
+  const unlocked = STATE.adj.unlocked || 1;
+  map.innerHTML = ADJ_LEVELS.map((lv, i) => {
+    const n = i + 1, best = STATE.adj.stars[n] || 0;
+    let cls = best > 0 ? 'done' : (n <= unlocked ? 'unlocked' : 'locked');
+    const stars = best > 0 ? '⭐'.repeat(best) + '☆'.repeat(3 - best) : (cls === 'locked' ? '🔒' : '• • •');
+    const lock = cls === 'locked' ? '<span class="lock-ic">🔒</span>' : '';
+    const click = cls === 'locked' ? '' : `onclick="openAdjLevel(${n})"`;
+    return `<div class="level-node ${cls}" ${click}>${lock}<span class="lvl-num">${lv.icon}</span><span class="lvl-name">${n}. ${lv.short}</span><span class="lvl-stars">${stars}</span></div>`;
+  }).join('');
+}
+function toggleAdjLearn() {
+  const el = document.getElementById('adjLearn');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+function adjBackToMap() {
+  document.getElementById('adjPlay').style.display = 'none';
+  document.getElementById('adjHome').style.display = 'block';
+  renderAdjMap();
+}
+function openAdjLevel(n) {
+  const lv = ADJ_LEVELS[n - 1]; if (!lv) return;
+  document.getElementById('adjHome').style.display = 'none';
+  const play = document.getElementById('adjPlay'); play.style.display = 'block';
+  adjState = { level:n, qIndex:0, correct:0, total:lv.questions.length, answered:false };
+  play.innerHTML = `
+    <div class="game-hud"><button class="back-btn" onclick="adjBackToMap()">← Map</button><span class="hud-target">${lv.icon} Level ${n}: ${lv.title}</span></div>
+    <div class="concept-card"><h3>${lv.icon} ${lv.title}</h3><p>${lv.concept}</p>${lv.eg ? `<div class="eg">${lv.eg}</div>` : ''}</div>
+    <div id="adjQ"></div>`;
+  speak(lv.title + '. ' + lv.concept.replace(/<[^>]+>/g, ''));
+  renderAdjQ();
+}
+function renderAdjQ() {
+  const lv = ADJ_LEVELS[adjState.level - 1], i = adjState.qIndex;
+  if (i >= lv.questions.length) { finishAdjLevel(); return; }
+  adjState.answered = false;
+  const q = lv.questions[i];
+  const opts = q.options.map((o, idx) => `<button class="option-btn" data-idx="${idx}" onclick="answerAdj(${idx})">${o}</button>`).join('');
+  document.getElementById('adjQ').innerHTML = `<div class="exercise-card"><div class="q">${q.q}</div><div class="options">${opts}</div><div class="feedback" id="adjFb"></div><div style="margin-top:12px;text-align:right;"><span style="color:var(--text-muted);font-size:0.85rem;">Question ${i + 1}/${lv.questions.length}</span><div class="progress-bar"><div class="fill" style="width:${(i / lv.questions.length) * 100}%;"></div></div></div></div>`;
+}
+function answerAdj(idx) {
+  if (adjState.answered) return; adjState.answered = true;
+  const lv = ADJ_LEVELS[adjState.level - 1], q = lv.questions[adjState.qIndex], correct = q.answer;
+  const fb = document.getElementById('adjFb');
+  document.querySelectorAll('#adjQ .option-btn').forEach(b => { b.disabled = true; const bi = parseInt(b.dataset.idx); if (bi === correct) b.classList.add('correct'); else if (bi === idx && idx !== correct) b.classList.add('wrong'); });
+  if (idx === correct) { fb.className = 'feedback correct show'; fb.textContent = '✅ Correct! ' + (q.explain || ''); adjState.correct++; addStar(); fireConfetti(8); checkBadges(); }
+  else { fb.className = 'feedback wrong show'; fb.textContent = '❌ ' + (q.explain || ('Answer: ' + q.options[correct])); addWrong(); }
+  adjState.qIndex++; saveState(); setTimeout(renderAdjQ, 1200);
+}
+function finishAdjLevel() {
+  const n = adjState.level, pct = Math.round((adjState.correct / adjState.total) * 100), stars = adjStars(pct);
+  if (stars > (STATE.adj.stars[n] || 0)) STATE.adj.stars[n] = stars;
+  const passed = stars >= 1;
+  if (passed && n < 10 && (STATE.adj.unlocked || 1) < n + 1) STATE.adj.unlocked = n + 1;
+  saveState();
+  const starRow = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  let next = '';
+  if (passed && n < 10) next = `<button class="btn btn-primary" onclick="openAdjLevel(${n + 1})">▶️ Next Level</button> `;
+  else if (!passed) next = `<button class="btn btn-primary" onclick="openAdjLevel(${n})">🔄 Try Again</button> `;
+  const boss = (passed && n === 10) ? '<p style="color:var(--accent);font-weight:800;font-size:1.1rem;margin-top:6px;">👑 You are an ADJECTIVE MASTER!</p>' : '';
+  document.getElementById('adjPlay').innerHTML = `<div class="result-box"><div class="big">${passed ? (n === 10 ? '👑' : '🎉') : '💪'}</div><div class="score-text">Level ${n} ${passed ? 'Complete!' : '— Try again!'}</div><div style="font-size:1.9rem;margin:6px 0;">${starRow}</div><p>You got <strong>${adjState.correct}</strong>/<strong>${adjState.total}</strong> (${pct}%)</p>${boss}<p style="color:var(--text-muted);font-size:0.85rem;">${passed ? 'Tip: score 90%+ for all 3 stars!' : 'Get at least half right to unlock the next level.'}</p><div style="margin-top:14px;">${next}<button class="btn btn-small btn-success" onclick="adjBackToMap()">🗺️ Level Map</button></div></div>`;
+  if (passed) { fireConfetti(stars >= 3 ? 40 : 20); playFanfare(); if (stars >= 3) showStarBurst(); }
+}
+
+// ============================================================
 // RESET
 // ============================================================
 function resetProgress() {
@@ -1707,8 +1942,10 @@ function resetProgress() {
   STATE.answered = 0; STATE.correct = 0;
   STATE.badges = { badge1:false, badge2:false, badge3:false, badge4:false, badge5:false };
   STATE.cpIndex = 0; STATE.collIndex = 0; STATE.absIndex = 0; STATE.countIndex = 0; STATE.genderIndex = 0; STATE.numIndex = 0;
+  STATE.adj = { unlocked: 1, stars: {} };
   saveState(); updateUI();
   resetCP(); resetColl(); resetAbs(); resetGender(); resetNum(); resetCount();
+  adjBackToMap();
   document.getElementById('quizArea').innerHTML = `<div style="text-align:center;padding:30px 0;color:var(--text-muted);"><span style="font-size:3rem;">🎮</span><p style="margin-top:10px;">Pick a game above to start playing!</p></div>`;
 }
 
@@ -1750,6 +1987,8 @@ function resetProgress() {
 // ============================================================
 loadState();
 renderCP(); renderColl(); renderAbs(); renderGender(); renderNum(); renderCount();
+if (!STATE.adj) STATE.adj = { unlocked: 1, stars: {} };
+renderAdjMap();
 
 // Sync sound + grade controls with saved state
 document.getElementById('soundIcon').textContent = STATE.soundOn ? '🔊' : '🔇';
