@@ -1,8 +1,10 @@
 # 🌟 Noun Ninjas — Grammar Adventure (Classes 1–5)
 
-A fun, modern, single-file web app that teaches **nouns** to kids in Classes 1–5
+A fun, modern, **single-file** web app that teaches **nouns** to kids in Classes 1–5
 through games, sounds, and rewards. No installation, no internet needed — just
 open `index.html` in any browser.
+
+**▶️ Play online:** https://drajays.github.io/noun-ninjas/
 
 ## ✨ Features
 - **Learn** common, proper, collective & abstract nouns, gender, number (singular/plural rules), countable/uncountable.
@@ -13,7 +15,7 @@ open `index.html` in any browser.
 - **🖨️ Classroom tools:** printable worksheet (with teacher answer key) and a reward certificate.
 - Progress is saved in the browser (localStorage).
 
-## ▶️ Play
-Open `index.html` (or `noun-ninjas.html`) in any modern browser.
+## ▶️ Run locally
+Open `index.html` in any modern browser.
 
 Made with ❤️ for young learners.
