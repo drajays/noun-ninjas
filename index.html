@@ -313,6 +313,8 @@
     <button class="tab-btn" data-tab="pronouns">🧑 Pronouns</button>
     <button class="tab-btn" data-tab="verbs">🏃 Verbs</button>
     <button class="tab-btn" data-tab="adverbs">💨 Adverbs</button>
+    <button class="tab-btn" data-tab="prepositions">🧭 Prepositions</button>
+    <button class="tab-btn" data-tab="conjunctions">🔗 Conjunctions</button>
     <button class="tab-btn" data-tab="arcade">🕹️ Arcade</button>
     <button class="tab-btn" data-tab="quiz">🎮 Quiz Games</button>
     <button class="tab-btn" data-tab="class">🖨️ Classroom</button>
@@ -779,6 +781,52 @@
       <div id="advPlay" style="display:none;"></div>
     </div>
 
+    <!-- ==================== PREPOSITIONS ==================== -->
+    <div class="page" id="page-prepositions">
+      <h2><span class="emoji">🧭</span> Prepositions — Level Adventure</h2>
+      <div id="prepHome">
+        <div class="info-box"><span class="label">🎯 Your Mission</span>A <strong>Preposition</strong> is a little word placed before a noun to show its <strong>relation</strong> to something else — usually <strong>where</strong> or <strong>when</strong>. <em>The book is <strong>on</strong> the table.</em> Clear all <strong>8 levels</strong> to become a <strong>Preposition Pro</strong>! 👑 Tap <strong>💡 Hint</strong>.</div>
+        <div style="text-align:center;margin:10px 0;">
+          <button class="btn btn-small btn-success" onclick="togglePrepLearn()">📖 Learn Prepositions</button>
+        </div>
+        <div class="concept-card" id="prepLearn" style="display:none;">
+          <h3>📖 Prepositions — Quick Guide</h3>
+          <p>A <b>Preposition</b> comes before a noun/pronoun and shows how it relates to another word.</p>
+          <ul style="margin:6px 0 0 18px;line-height:1.8;">
+            <li>📍 <b>Place</b>: in, on, under, over, above, below, between, beside, near, behind</li>
+            <li>⏰ <b>Time</b>: at (clock times), on (days), in (months/years), before, after, during</li>
+            <li>🏃 <b>Direction</b>: to, into, from, across, through, along, towards, out of</li>
+          </ul>
+          <p style="margin-top:10px;"><b>The tricky trio:</b> <b>at</b> a point (at the door, at 5), <b>in</b> something/large times (in the box, in May), <b>on</b> a surface/days (on the wall, on Monday).</p>
+        </div>
+        <div class="level-map" id="prepMap"></div>
+      </div>
+      <div id="prepPlay" style="display:none;"></div>
+    </div>
+
+    <!-- ==================== CONJUNCTIONS ==================== -->
+    <div class="page" id="page-conjunctions">
+      <h2><span class="emoji">🔗</span> Conjunctions — Level Adventure</h2>
+      <div id="conjHome">
+        <div class="info-box green"><span class="label">🎯 Your Mission</span>A <strong>Conjunction</strong> is a word that <strong>joins</strong> words, phrases, or sentences. <em>Rama <strong>and</strong> Hari · slow <strong>but</strong> steady · I slept <strong>because</strong> I was tired.</em> Clear all <strong>8 levels</strong> to become a <strong>Joining Genius</strong>! 👑 Tap <strong>💡 Hint</strong>.</div>
+        <div style="text-align:center;margin:10px 0;">
+          <button class="btn btn-small btn-success" onclick="toggleConjLearn()">📖 Learn Conjunctions</button>
+        </div>
+        <div class="concept-card" id="conjLearn" style="display:none;">
+          <h3>📖 Conjunctions — Quick Guide</h3>
+          <p>A <b>Conjunction</b> joins words, phrases, or whole sentences.</p>
+          <ul style="margin:6px 0 0 18px;line-height:1.8;">
+            <li><b>and</b> = adds · <b>but</b> = contrast · <b>or</b> = choice · <b>so</b> = result</li>
+            <li><b>because</b> = reason · <b>if / unless</b> = condition</li>
+            <li><b>when, while, before, after, until</b> = time · <b>although / though</b> = contrast</li>
+          </ul>
+          <p style="margin-top:10px;"><b>Correlative pairs</b> work in twos: <b>either…or</b>, <b>neither…nor</b>, <b>both…and</b>, <b>not only…but also</b>.</p>
+        </div>
+        <div class="level-map" id="conjMap"></div>
+      </div>
+      <div id="conjPlay" style="display:none;"></div>
+    </div>
+
     <!-- ==================== ARCADE ==================== -->
     <div class="page" id="page-arcade">
       <h2><span class="emoji">🕹️</span> Arcade Games</h2>
@@ -900,6 +948,8 @@ const STATE = {
   pron: { unlocked: 1, stars: {} },
   verb: { unlocked: 1, stars: {} },
   adv: { unlocked: 1, stars: {} },
+  prep: { unlocked: 1, stars: {} },
+  conj: { unlocked: 1, stars: {} },
 };
 
 function loadState() {
@@ -2769,6 +2819,324 @@ function finishAdvLevel() {
 }
 
 // ============================================================
+// PREPOSITIONS — 8-LEVEL ADVENTURE (with hints)
+// ============================================================
+const PREP_LEVELS = [
+  { icon:'🧭', short:'What is it?', title:'What is a Preposition?',
+    concept:'A <b>Preposition</b> is a word placed <b>before a noun or pronoun</b> to show its <b>relation</b> to another word. <em>The book is <b>on</b> the table.</em> Common: in, on, under, at, to, from, with, by.',
+    eg:'in · on · under · to · from · with',
+    questions:[
+      { q:'Find the preposition: "The book is on the table."', options:['book','is','on','table'], answer:2, hint:'Which word shows WHERE the book is?', explain:'"on" shows the relation.' },
+      { q:'Find the preposition: "The cat sat under the chair."', options:['cat','sat','under','chair'], answer:2, hint:'Where did the cat sit?', explain:'"under".' },
+      { q:'A preposition usually comes before a...', options:['verb','noun or pronoun','adjective','adverb'], answer:1, hint:'It introduces a noun.', explain:'before a noun/pronoun.' },
+      { q:'Find the preposition: "He went to school."', options:['He','went','to','school'], answer:2, hint:'Which word leads to "school"?', explain:'"to".' },
+      { q:'Which word is a preposition?', options:['in','run','happy','dog'], answer:0, hint:'Which shows position or relation?', explain:'"in" is a preposition.' },
+      { q:'"The pen is in the box." "in" shows the pen\'s...', options:['action','colour','position','number'], answer:2, hint:'It tells where the pen is.', explain:'position/relation.' },
+    ]},
+  { icon:'📍', short:'Place', title:'Prepositions of Place',
+    concept:'These show <b>where</b>: in, on, under, over, above, below, between, beside, near, behind, in front of.',
+    eg:'in the box · on the wall · between two friends',
+    questions:[
+      { q:'"The ball is ___ the box." (inside)', options:['in','on','over','at'], answer:0, hint:'Inside → in.', explain:'in the box.' },
+      { q:'"The lamp hangs ___ the table." (higher up)', options:['under','above','beside','in'], answer:1, hint:'Higher up → above.', explain:'above the table.' },
+      { q:'"The dog is ___ the chair." (underneath)', options:['on','over','under','at'], answer:2, hint:'Underneath → under.', explain:'under the chair.' },
+      { q:'"She sat ___ her two friends." (in the middle of two)', options:['among','between','beside','behind'], answer:1, hint:'Two → between.', explain:'between (two).' },
+      { q:'"The picture is ___ the wall." (touching the surface)', options:['in','on','at','over'], answer:1, hint:'On a surface → on.', explain:'on the wall.' },
+      { q:'"The shoes are ___ the bed." (underneath)', options:['on','over','under','above'], answer:2, hint:'Underneath → under.', explain:'under the bed.' },
+    ]},
+  { icon:'⏰', short:'Time', title:'Prepositions of Time',
+    concept:'These show <b>when</b>: <b>at</b> (clock times), <b>on</b> (days/dates), <b>in</b> (months/years), before, after, during.',
+    eg:'at 8 o\'clock · on Sunday · in December',
+    questions:[
+      { q:'"School starts ___ 8 o\'clock."', options:['in','on','at','by'], answer:2, hint:'Clock time → at.', explain:'at 8 o\'clock.' },
+      { q:'"We rest ___ Sunday."', options:['at','on','in','to'], answer:1, hint:'Days → on.', explain:'on Sunday.' },
+      { q:'"It is cold ___ December."', options:['at','on','in','by'], answer:2, hint:'Months → in.', explain:'in December.' },
+      { q:'"Wash your hands ___ lunch." (earlier)', options:['after','before','during','on'], answer:1, hint:'Earlier → before.', explain:'before lunch.' },
+      { q:'"Brush your teeth ___ dinner." (later)', options:['before','after','at','in'], answer:1, hint:'Later → after.', explain:'after dinner.' },
+      { q:'Which preposition is used for a year? "___ 2020"', options:['at','on','in','by'], answer:2, hint:'Years → in.', explain:'in 2020.' },
+    ]},
+  { icon:'🏃', short:'Direction', title:'Direction & Movement',
+    concept:'These show <b>movement</b>: to, into, from, across, through, along, towards, out of.',
+    eg:'into the room · across the road · through the tunnel',
+    questions:[
+      { q:'"He walked ___ the room." (entered it)', options:['into','from','across','on'], answer:0, hint:'Movement inside → into.', explain:'into the room.' },
+      { q:'"She came ___ the market." (starting place)', options:['to','from','into','at'], answer:1, hint:'Starting place → from.', explain:'from the market.' },
+      { q:'"The boy ran ___ the road." (one side to the other)', options:['along','across','into','at'], answer:1, hint:'Side to side → across.', explain:'across the road.' },
+      { q:'"We went ___ school." (destination)', options:['to','from','out of','at'], answer:0, hint:'Destination → to.', explain:'to school.' },
+      { q:'"The train went ___ the tunnel." (in one end, out the other)', options:['across','along','through','over'], answer:2, hint:'In and out → through.', explain:'through the tunnel.' },
+      { q:'"We walked ___ the river." (following its length)', options:['across','along','into','from'], answer:1, hint:'Following the length → along.', explain:'along the river.' },
+    ]},
+  { icon:'🎯', short:'at·in·on', title:'at, in, on (Tricky Trio)',
+    concept:'<b>at</b> = a point (at the door, at 5 o\'clock). <b>in</b> = inside / months & years (in the box, in May). <b>on</b> = a surface / days (on the table, on Monday).',
+    eg:'at the gate · in May · on Monday',
+    questions:[
+      { q:'"The keys are ___ the drawer." (inside)', options:['at','in','on','by'], answer:1, hint:'Inside → in.', explain:'in the drawer.' },
+      { q:'"Meet me ___ the gate." (a point)', options:['at','in','on','of'], answer:0, hint:'A point → at.', explain:'at the gate.' },
+      { q:'"The book is ___ the shelf." (a surface)', options:['at','in','on','to'], answer:2, hint:'On a surface → on.', explain:'on the shelf.' },
+      { q:'"My birthday is ___ June."', options:['at','in','on','by'], answer:1, hint:'Months → in.', explain:'in June.' },
+      { q:'"We met ___ Monday."', options:['at','in','on','to'], answer:2, hint:'Days → on.', explain:'on Monday.' },
+      { q:'"He is ___ home." (fixed phrase)', options:['at','in','on','to'], answer:0, hint:'We say "at home".', explain:'at home.' },
+    ]},
+  { icon:'🧩', short:'More', title:'More Prepositions',
+    concept:'<b>by</b> (beside / by means of), <b>with</b> (together / using), <b>for</b>, <b>of</b>, <b>about</b>, <b>near</b>, <b>without</b>.',
+    eg:'cut with a knife · a story about a lion · a cup of tea',
+    questions:[
+      { q:'"Cut the bread ___ a knife." (using a tool)', options:['by','with','for','of'], answer:1, hint:'Using a tool → with.', explain:'with a knife.' },
+      { q:'"Stand ___ me." (beside)', options:['by','for','of','about'], answer:0, hint:'Beside → by.', explain:'by me.' },
+      { q:'"This gift is ___ you."', options:['of','about','for','with'], answer:2, hint:'Meant for someone → for.', explain:'for you.' },
+      { q:'"He told a story ___ a lion."', options:['of','about','for','with'], answer:1, hint:'On the topic of → about.', explain:'about a lion.' },
+      { q:'"A cup ___ tea."', options:['of','for','with','by'], answer:0, hint:'A cup OF tea.', explain:'of tea.' },
+      { q:'"She lives ___ the school." (close to)', options:['near','for','of','about'], answer:0, hint:'Close to → near.', explain:'near the school.' },
+    ]},
+  { icon:'🔍', short:'Find it', title:'Find the Preposition',
+    concept:'A preposition links a noun/pronoun to the rest of the sentence — spot it!',
+    eg:'into the pond · beside his mother · over the house',
+    questions:[
+      { q:'Find the preposition: "The frog jumped into the pond."', options:['frog','jumped','into','pond'], answer:2, hint:'Movement word before "pond".', explain:'"into".' },
+      { q:'Find the preposition: "He sat beside his mother."', options:['sat','beside','his','mother'], answer:1, hint:'Shows where he sat.', explain:'"beside".' },
+      { q:'Find the preposition: "We played in the garden."', options:['We','played','in','garden'], answer:2, hint:'Before "the garden".', explain:'"in".' },
+      { q:'Find the preposition: "The bird flew over the house."', options:['bird','flew','over','house'], answer:2, hint:'Shows the path.', explain:'"over".' },
+      { q:'Find the preposition: "The gift is from grandma."', options:['gift','is','from','grandma'], answer:2, hint:'Shows the source.', explain:'"from".' },
+      { q:'Find the preposition: "Put the cup on the tray."', options:['Put','cup','on','tray'], answer:2, hint:'Before "the tray".', explain:'"on".' },
+    ]},
+  { icon:'👑', short:'BOSS', title:'Boss — Pick the Right Preposition',
+    concept:'Choose the best preposition for each blank. Use everything you have learned! Pass to become a <b>Preposition Pro</b>! 👑',
+    eg:'',
+    questions:[
+      { q:'"The fish swims ___ water."', options:['in','on','at','to'], answer:0, hint:'Inside the water.', explain:'in water.' },
+      { q:'"We will meet ___ 5 o\'clock."', options:['in','on','at','by'], answer:2, hint:'Clock time → at.', explain:'at 5 o\'clock.' },
+      { q:'"The plane flew ___ the clouds." (higher)', options:['under','above','into','at'], answer:1, hint:'Higher → above.', explain:'above the clouds.' },
+      { q:'"He jumped ___ the wall." (one side over to the other)', options:['under','through','over','in'], answer:2, hint:'Up and across → over.', explain:'over the wall.' },
+      { q:'"I was born ___ 2015."', options:['at','on','in','by'], answer:2, hint:'Years → in.', explain:'in 2015.' },
+      { q:'"The party is ___ Saturday."', options:['at','in','on','to'], answer:2, hint:'Days → on.', explain:'on Saturday.' },
+      { q:'"She is afraid ___ dogs."', options:['of','for','with','at'], answer:0, hint:'We say "afraid of".', explain:'afraid of.' },
+      { q:'"He is good ___ maths."', options:['in','at','of','for'], answer:1, hint:'We say "good at".', explain:'good at.' },
+      { q:'"Walk ___ the bridge to cross the river."', options:['along','across','into','at'], answer:1, hint:'From one side to the other → across.', explain:'across the bridge.' },
+      { q:'"Tea ___ milk, please." (together with)', options:['of','with','for','by'], answer:1, hint:'Together → with.', explain:'with milk.' },
+    ]},
+];
+
+let prepState = null;
+function renderPrepMap() {
+  const map = document.getElementById('prepMap'); if (!map) return;
+  const unlocked = STATE.prep.unlocked || 1;
+  map.innerHTML = PREP_LEVELS.map((lv, i) => {
+    const n = i + 1, best = STATE.prep.stars[n] || 0;
+    let cls = best > 0 ? 'done' : (n <= unlocked ? 'unlocked' : 'locked');
+    const stars = best > 0 ? '⭐'.repeat(best) + '☆'.repeat(3 - best) : (cls === 'locked' ? '🔒' : '• • •');
+    const lock = cls === 'locked' ? '<span class="lock-ic">🔒</span>' : '';
+    const click = cls === 'locked' ? '' : `onclick="openPrepLevel(${n})"`;
+    return `<div class="level-node ${cls}" ${click}>${lock}<span class="lvl-num">${lv.icon}</span><span class="lvl-name">${n}. ${lv.short}</span><span class="lvl-stars">${stars}</span></div>`;
+  }).join('');
+}
+function togglePrepLearn() { const el = document.getElementById('prepLearn'); el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+function prepBackToMap() { document.getElementById('prepPlay').style.display = 'none'; document.getElementById('prepHome').style.display = 'block'; renderPrepMap(); }
+function openPrepLevel(n) {
+  const lv = PREP_LEVELS[n - 1]; if (!lv) return;
+  document.getElementById('prepHome').style.display = 'none';
+  const play = document.getElementById('prepPlay'); play.style.display = 'block';
+  prepState = { level:n, qIndex:0, correct:0, total:lv.questions.length, answered:false };
+  play.innerHTML = `
+    <div class="game-hud"><button class="back-btn" onclick="prepBackToMap()">← Map</button><span class="hud-target">${lv.icon} Level ${n}: ${lv.title}</span></div>
+    <div class="concept-card"><h3>${lv.icon} ${lv.title}</h3><p>${lv.concept}</p>${lv.eg ? `<div class="eg">${lv.eg}</div>` : ''}</div>
+    <div id="prepQ"></div>`;
+  speak(lv.title + '. ' + lv.concept.replace(/<[^>]+>/g, ''));
+  renderPrepQ();
+}
+function renderPrepQ() {
+  const lv = PREP_LEVELS[prepState.level - 1], i = prepState.qIndex;
+  if (i >= lv.questions.length) { finishPrepLevel(); return; }
+  prepState.answered = false;
+  const q = lv.questions[i];
+  const opts = q.options.map((o, idx) => `<button class="option-btn" data-idx="${idx}" onclick="answerPrep(${idx})">${o}</button>`).join('');
+  const hintBtn = q.hint ? `<div style="margin-top:10px;"><button class="btn btn-small btn-hint" onclick="showPrepHint()">💡 Hint</button></div><div class="hint-box" id="prepHint" style="display:none;"></div>` : '';
+  document.getElementById('prepQ').innerHTML = `<div class="exercise-card"><div class="q">${q.q}</div><div class="options">${opts}</div>${hintBtn}<div class="feedback" id="prepFb"></div><div style="margin-top:12px;text-align:right;"><span style="color:var(--text-muted);font-size:0.85rem;">Question ${i + 1}/${lv.questions.length}</span><div class="progress-bar"><div class="fill" style="width:${(i / lv.questions.length) * 100}%;"></div></div></div></div>`;
+}
+function showPrepHint() { const q = PREP_LEVELS[prepState.level - 1].questions[prepState.qIndex]; const box = document.getElementById('prepHint'); if (box && q.hint) { box.textContent = '💡 ' + q.hint; box.style.display = 'block'; } }
+function answerPrep(idx) {
+  if (prepState.answered) return; prepState.answered = true;
+  const lv = PREP_LEVELS[prepState.level - 1], q = lv.questions[prepState.qIndex], correct = q.answer;
+  const fb = document.getElementById('prepFb');
+  document.querySelectorAll('#prepQ .option-btn').forEach(b => { b.disabled = true; const bi = parseInt(b.dataset.idx); if (bi === correct) b.classList.add('correct'); else if (bi === idx && idx !== correct) b.classList.add('wrong'); });
+  if (idx === correct) { fb.className = 'feedback correct show'; fb.textContent = '✅ Correct! ' + (q.explain || ''); prepState.correct++; addStar(); fireConfetti(8); checkBadges(); }
+  else { fb.className = 'feedback wrong show'; fb.textContent = '❌ ' + (q.explain || ('Answer: ' + q.options[correct])); addWrong(); }
+  prepState.qIndex++; saveState(); setTimeout(renderPrepQ, 1200);
+}
+function finishPrepLevel() {
+  const n = prepState.level, pct = Math.round((prepState.correct / prepState.total) * 100), stars = adjStars(pct);
+  if (stars > (STATE.prep.stars[n] || 0)) STATE.prep.stars[n] = stars;
+  const passed = stars >= 1;
+  if (passed && n < 8 && (STATE.prep.unlocked || 1) < n + 1) STATE.prep.unlocked = n + 1;
+  saveState();
+  const starRow = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  let next = '';
+  if (passed && n < 8) next = `<button class="btn btn-primary" onclick="openPrepLevel(${n + 1})">▶️ Next Level</button> `;
+  else if (!passed) next = `<button class="btn btn-primary" onclick="openPrepLevel(${n})">🔄 Try Again</button> `;
+  const boss = (passed && n === 8) ? '<p style="color:var(--accent);font-weight:800;font-size:1.1rem;margin-top:6px;">👑 You are a PREPOSITION PRO!</p>' : '';
+  document.getElementById('prepPlay').innerHTML = `<div class="result-box"><div class="big">${passed ? (n === 8 ? '👑' : '🎉') : '💪'}</div><div class="score-text">Level ${n} ${passed ? 'Complete!' : '— Try again!'}</div><div style="font-size:1.9rem;margin:6px 0;">${starRow}</div><p>You got <strong>${prepState.correct}</strong>/<strong>${prepState.total}</strong> (${pct}%)</p>${boss}<p style="color:var(--text-muted);font-size:0.85rem;">${passed ? 'Tip: score 90%+ for all 3 stars!' : 'Get at least half right to unlock the next level.'}</p><div style="margin-top:14px;">${next}<button class="btn btn-small btn-success" onclick="prepBackToMap()">🗺️ Level Map</button></div></div>`;
+  if (passed) { fireConfetti(stars >= 3 ? 40 : 20); playFanfare(); if (stars >= 3) showStarBurst(); }
+}
+
+// ============================================================
+// CONJUNCTIONS — 8-LEVEL ADVENTURE (with hints)
+// ============================================================
+const CONJ_LEVELS = [
+  { icon:'🔗', short:'What is it?', title:'What is a Conjunction?',
+    concept:'A <b>Conjunction</b> is a word that <b>joins</b> words, phrases, or sentences. <em>Rama <b>and</b> Hari · poor <b>but</b> happy · I slept <b>because</b> I was tired.</em>',
+    eg:'and · but · or · so · because',
+    questions:[
+      { q:'Find the conjunction: "Rama and Hari are friends."', options:['Rama','and','Hari','are'], answer:1, hint:'Which word joins the two names?', explain:'"and" joins them.' },
+      { q:'Find the conjunction: "She is poor but happy."', options:['She','poor','but','happy'], answer:2, hint:'Which word joins two opposite ideas?', explain:'"but".' },
+      { q:'A conjunction is a word that...', options:['names a thing','joins words or sentences','describes a noun','shows position'], answer:1, hint:'It links things together.', explain:'It joins words/sentences.' },
+      { q:'Find the conjunction: "Hurry, or you will be late."', options:['Hurry','or','you','late'], answer:1, hint:'Which word gives a choice/warning?', explain:'"or".' },
+      { q:'Which word is a conjunction?', options:['and','run','blue','under'], answer:0, hint:'Which one joins things?', explain:'"and".' },
+      { q:'Find the conjunction: "I was tired, so I slept."', options:['tired','so','I','slept'], answer:1, hint:'Which word shows the result?', explain:'"so".' },
+    ]},
+  { icon:'🔀', short:'and·but·or', title:'and / but / or',
+    concept:'<b>and</b> = adds things together · <b>but</b> = shows a contrast · <b>or</b> = shows a choice.',
+    eg:'tea and coffee · small but strong · tea or coffee?',
+    questions:[
+      { q:'"I like tea ___ coffee." (both)', options:['but','and','or','so'], answer:1, hint:'Adding → and.', explain:'and (adds).' },
+      { q:'"He is small ___ strong." (opposite ideas)', options:['and','but','or','so'], answer:1, hint:'Contrast → but.', explain:'but (contrast).' },
+      { q:'"Do you want tea ___ coffee?" (a choice)', options:['and','but','or','so'], answer:2, hint:'A choice → or.', explain:'or (choice).' },
+      { q:'"She tried hard ___ failed." (contrast)', options:['and','but','or','so'], answer:1, hint:'Surprising contrast → but.', explain:'but.' },
+      { q:'"Run fast, ___ you will miss the bus." (otherwise)', options:['and','but','or','so'], answer:2, hint:'or = otherwise.', explain:'or.' },
+      { q:'Which joins two things that go together?', options:['but','or','and','so'], answer:2, hint:'Adding things.', explain:'and.' },
+    ]},
+  { icon:'🎯', short:'because·so', title:'because / so (Reason & Result)',
+    concept:'<b>because</b> gives the <b>reason</b> (answers "Why?"). <b>so</b> gives the <b>result</b>. <em>He stayed home <b>because</b> he was ill. He was ill, <b>so</b> he stayed home.</em>',
+    eg:'because = reason · so = result',
+    questions:[
+      { q:'"He stayed home ___ he was ill." (the reason)', options:['so','because','but','or'], answer:1, hint:'Gives the reason → because.', explain:'because.' },
+      { q:'"He was ill, ___ he stayed home." (the result)', options:['because','so','but','and'], answer:1, hint:'Gives the result → so.', explain:'so.' },
+      { q:'"We took an umbrella ___ it was raining."', options:['so','because','but','or'], answer:1, hint:'Why did we take it?', explain:'because.' },
+      { q:'"It was raining, ___ we took an umbrella."', options:['because','so','but','or'], answer:1, hint:'What was the result?', explain:'so.' },
+      { q:'Which word answers the question "Why?"', options:['so','and','because','or'], answer:2, hint:'It gives the reason.', explain:'because.' },
+      { q:'"I am happy ___ we won the match."', options:['so','but','because','or'], answer:2, hint:'The reason for being happy.', explain:'because.' },
+    ]},
+  { icon:'⏰', short:'when·while', title:'Time Joiners (when, while…)',
+    concept:'These join with <b>time</b>: <b>when, while, before, after, until</b>.',
+    eg:'before you eat · while he walked · until I return',
+    questions:[
+      { q:'"Wash your hands ___ you eat." (earlier)', options:['after','before','while','until'], answer:1, hint:'Earlier action → before.', explain:'before.' },
+      { q:'"Brush your teeth ___ you eat." (later)', options:['before','after','when','if'], answer:1, hint:'Later action → after.', explain:'after.' },
+      { q:'"He sang ___ he walked." (at the same time)', options:['before','after','while','if'], answer:2, hint:'Same time → while.', explain:'while.' },
+      { q:'"Call me ___ you arrive."', options:['when','before','until','but'], answer:0, hint:'At the time you arrive.', explain:'when.' },
+      { q:'"Wait here ___ I come back."', options:['after','until','while','or'], answer:1, hint:'Up to that time → until.', explain:'until.' },
+      { q:'Which conjunction means "at the same time"?', options:['before','after','while','until'], answer:2, hint:'Two things happening together.', explain:'while.' },
+    ]},
+  { icon:'❓', short:'if·unless', title:'Condition (if / unless)',
+    concept:'<b>if</b> = on this condition · <b>unless</b> = if not.',
+    eg:'if you ask · unless you study',
+    questions:[
+      { q:'"I will help you ___ you ask." (on condition)', options:['unless','if','but','so'], answer:1, hint:'A condition → if.', explain:'if.' },
+      { q:'"You will fail ___ you study." (= if you do NOT)', options:['if','unless','because','while'], answer:1, hint:'unless = if not.', explain:'unless.' },
+      { q:'"___ it rains, we will stay home."', options:['If','Unless','So','But'], answer:0, hint:'A condition → If.', explain:'If.' },
+      { q:'"You can\'t enter ___ you have a ticket."', options:['if','unless','because','and'], answer:1, hint:'= if you do not have a ticket.', explain:'unless.' },
+      { q:'"Unless" means the same as...', options:['if','if not','because','so'], answer:1, hint:'It is the negative of "if".', explain:'if not.' },
+      { q:'"We will play ___ it is sunny."', options:['unless','if','but','so'], answer:1, hint:'On the condition it is sunny.', explain:'if.' },
+    ]},
+  { icon:'🔄', short:'although', title:'Contrast (although / though)',
+    concept:'<b>although / though</b> join two ideas that <b>contrast</b> or are surprising. <em>Although it was cold, we went out.</em>',
+    eg:'although he was tired… · though she was nervous…',
+    questions:[
+      { q:'"___ he was tired, he kept working."', options:['Because','Although','So','If'], answer:1, hint:'A surprising contrast.', explain:'Although.' },
+      { q:'"She passed ___ she was nervous."', options:['because','though','so','and'], answer:1, hint:'Contrast/surprise → though.', explain:'though.' },
+      { q:'"Although" joins two ideas that...', options:['agree','contrast / are surprising','add up','are equal'], answer:1, hint:'It shows a surprise.', explain:'They contrast.' },
+      { q:'"He is poor ___ honest." (contrast)', options:['so','though','because','if'], answer:1, hint:'Two contrasting qualities.', explain:'though.' },
+      { q:'"___ she is young, she is very wise."', options:['Because','So','Although','If'], answer:2, hint:'Young BUT wise — surprising.', explain:'Although.' },
+      { q:'Which word shows a contrast like "but"?', options:['because','although','so','and'], answer:1, hint:'It joins surprising ideas.', explain:'although.' },
+    ]},
+  { icon:'🔗🔗', short:'Pairs', title:'Correlative Pairs',
+    concept:'Some conjunctions work in <b>pairs</b>: <b>either…or</b>, <b>neither…nor</b>, <b>both…and</b>, <b>not only…but also</b>.',
+    eg:'either Ram or Shyam · neither cat nor dog · both Sita and Gita',
+    questions:[
+      { q:'"___ Ram ___ Shyam will go." (one of the two)', options:['either…or','neither…nor','both…and','not only…but'], answer:0, hint:'One OR the other.', explain:'either…or.' },
+      { q:'"___ the cat ___ the dog likes water." (not one, not the other)', options:['either…or','neither…nor','both…and','if…then'], answer:1, hint:'Not this one, not that one.', explain:'neither…nor.' },
+      { q:'"___ Sita ___ Gita are clever." (the two together)', options:['either…or','neither…nor','both…and','whether…or'], answer:2, hint:'The two together.', explain:'both…and.' },
+      { q:'Choose the pair for "not this one, not that one":', options:['both…and','either…or','neither…nor','not only…but'], answer:2, hint:'A negative pair.', explain:'neither…nor.' },
+      { q:'"either" is paired with...', options:['nor','or','and','but'], answer:1, hint:'either … ?', explain:'either…or.' },
+      { q:'"neither" is paired with...', options:['or','nor','and','but'], answer:1, hint:'neither … ?', explain:'neither…nor.' },
+    ]},
+  { icon:'👑', short:'BOSS', title:'Boss — Pick the Right Conjunction',
+    concept:'Choose the best joining word for each blank. Use everything you have learned! Pass to become a <b>Joining Genius</b>! 👑',
+    eg:'',
+    questions:[
+      { q:'"He is rich ___ unhappy." (contrast)', options:['and','but','so','or'], answer:1, hint:'Surprising contrast.', explain:'but.' },
+      { q:'"Study hard ___ you will pass." (and then)', options:['but','or','and','because'], answer:2, hint:'and = and then.', explain:'and.' },
+      { q:'"We stayed in ___ it was raining." (reason)', options:['so','but','because','or'], answer:2, hint:'The reason why.', explain:'because.' },
+      { q:'"Wait ___ I return."', options:['after','until','while','or'], answer:1, hint:'Up to that time.', explain:'until.' },
+      { q:'"___ you hurry, you will miss the train." (if not)', options:['If','Unless','Because','Although'], answer:1, hint:'= if you do not hurry.', explain:'Unless.' },
+      { q:'"I like ___ tea ___ coffee." (the two together)', options:['either…or','neither…nor','both…and','not only…but'], answer:2, hint:'Both together.', explain:'both…and.' },
+      { q:'"Call me ___ you reach home." (time)', options:['if','when','but','or'], answer:1, hint:'At the time you reach.', explain:'when.' },
+      { q:'"___ it was late, he kept reading." (contrast)', options:['Because','So','Although','If'], answer:2, hint:'Surprising contrast.', explain:'Although.' },
+      { q:'"Do you want juice ___ milk?" (choice)', options:['and','but','or','so'], answer:2, hint:'A choice between two.', explain:'or.' },
+      { q:'"She was sick, ___ she went to school." (surprise)', options:['so','because','but','and'], answer:2, hint:'Surprising contrast.', explain:'but.' },
+    ]},
+];
+
+let conjState = null;
+function renderConjMap() {
+  const map = document.getElementById('conjMap'); if (!map) return;
+  const unlocked = STATE.conj.unlocked || 1;
+  map.innerHTML = CONJ_LEVELS.map((lv, i) => {
+    const n = i + 1, best = STATE.conj.stars[n] || 0;
+    let cls = best > 0 ? 'done' : (n <= unlocked ? 'unlocked' : 'locked');
+    const stars = best > 0 ? '⭐'.repeat(best) + '☆'.repeat(3 - best) : (cls === 'locked' ? '🔒' : '• • •');
+    const lock = cls === 'locked' ? '<span class="lock-ic">🔒</span>' : '';
+    const click = cls === 'locked' ? '' : `onclick="openConjLevel(${n})"`;
+    return `<div class="level-node ${cls}" ${click}>${lock}<span class="lvl-num">${lv.icon}</span><span class="lvl-name">${n}. ${lv.short}</span><span class="lvl-stars">${stars}</span></div>`;
+  }).join('');
+}
+function toggleConjLearn() { const el = document.getElementById('conjLearn'); el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+function conjBackToMap() { document.getElementById('conjPlay').style.display = 'none'; document.getElementById('conjHome').style.display = 'block'; renderConjMap(); }
+function openConjLevel(n) {
+  const lv = CONJ_LEVELS[n - 1]; if (!lv) return;
+  document.getElementById('conjHome').style.display = 'none';
+  const play = document.getElementById('conjPlay'); play.style.display = 'block';
+  conjState = { level:n, qIndex:0, correct:0, total:lv.questions.length, answered:false };
+  play.innerHTML = `
+    <div class="game-hud"><button class="back-btn" onclick="conjBackToMap()">← Map</button><span class="hud-target">${lv.icon} Level ${n}: ${lv.title}</span></div>
+    <div class="concept-card"><h3>${lv.icon} ${lv.title}</h3><p>${lv.concept}</p>${lv.eg ? `<div class="eg">${lv.eg}</div>` : ''}</div>
+    <div id="conjQ"></div>`;
+  speak(lv.title + '. ' + lv.concept.replace(/<[^>]+>/g, ''));
+  renderConjQ();
+}
+function renderConjQ() {
+  const lv = CONJ_LEVELS[conjState.level - 1], i = conjState.qIndex;
+  if (i >= lv.questions.length) { finishConjLevel(); return; }
+  conjState.answered = false;
+  const q = lv.questions[i];
+  const opts = q.options.map((o, idx) => `<button class="option-btn" data-idx="${idx}" onclick="answerConj(${idx})">${o}</button>`).join('');
+  const hintBtn = q.hint ? `<div style="margin-top:10px;"><button class="btn btn-small btn-hint" onclick="showConjHint()">💡 Hint</button></div><div class="hint-box" id="conjHint" style="display:none;"></div>` : '';
+  document.getElementById('conjQ').innerHTML = `<div class="exercise-card"><div class="q">${q.q}</div><div class="options">${opts}</div>${hintBtn}<div class="feedback" id="conjFb"></div><div style="margin-top:12px;text-align:right;"><span style="color:var(--text-muted);font-size:0.85rem;">Question ${i + 1}/${lv.questions.length}</span><div class="progress-bar"><div class="fill" style="width:${(i / lv.questions.length) * 100}%;"></div></div></div></div>`;
+}
+function showConjHint() { const q = CONJ_LEVELS[conjState.level - 1].questions[conjState.qIndex]; const box = document.getElementById('conjHint'); if (box && q.hint) { box.textContent = '💡 ' + q.hint; box.style.display = 'block'; } }
+function answerConj(idx) {
+  if (conjState.answered) return; conjState.answered = true;
+  const lv = CONJ_LEVELS[conjState.level - 1], q = lv.questions[conjState.qIndex], correct = q.answer;
+  const fb = document.getElementById('conjFb');
+  document.querySelectorAll('#conjQ .option-btn').forEach(b => { b.disabled = true; const bi = parseInt(b.dataset.idx); if (bi === correct) b.classList.add('correct'); else if (bi === idx && idx !== correct) b.classList.add('wrong'); });
+  if (idx === correct) { fb.className = 'feedback correct show'; fb.textContent = '✅ Correct! ' + (q.explain || ''); conjState.correct++; addStar(); fireConfetti(8); checkBadges(); }
+  else { fb.className = 'feedback wrong show'; fb.textContent = '❌ ' + (q.explain || ('Answer: ' + q.options[correct])); addWrong(); }
+  conjState.qIndex++; saveState(); setTimeout(renderConjQ, 1200);
+}
+function finishConjLevel() {
+  const n = conjState.level, pct = Math.round((conjState.correct / conjState.total) * 100), stars = adjStars(pct);
+  if (stars > (STATE.conj.stars[n] || 0)) STATE.conj.stars[n] = stars;
+  const passed = stars >= 1;
+  if (passed && n < 8 && (STATE.conj.unlocked || 1) < n + 1) STATE.conj.unlocked = n + 1;
+  saveState();
+  const starRow = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  let next = '';
+  if (passed && n < 8) next = `<button class="btn btn-primary" onclick="openConjLevel(${n + 1})">▶️ Next Level</button> `;
+  else if (!passed) next = `<button class="btn btn-primary" onclick="openConjLevel(${n})">🔄 Try Again</button> `;
+  const boss = (passed && n === 8) ? '<p style="color:var(--accent);font-weight:800;font-size:1.1rem;margin-top:6px;">👑 You are a JOINING GENIUS!</p>' : '';
+  document.getElementById('conjPlay').innerHTML = `<div class="result-box"><div class="big">${passed ? (n === 8 ? '👑' : '🎉') : '💪'}</div><div class="score-text">Level ${n} ${passed ? 'Complete!' : '— Try again!'}</div><div style="font-size:1.9rem;margin:6px 0;">${starRow}</div><p>You got <strong>${conjState.correct}</strong>/<strong>${conjState.total}</strong> (${pct}%)</p>${boss}<p style="color:var(--text-muted);font-size:0.85rem;">${passed ? 'Tip: score 90%+ for all 3 stars!' : 'Get at least half right to unlock the next level.'}</p><div style="margin-top:14px;">${next}<button class="btn btn-small btn-success" onclick="conjBackToMap()">🗺️ Level Map</button></div></div>`;
+  if (passed) { fireConfetti(stars >= 3 ? 40 : 20); playFanfare(); if (stars >= 3) showStarBurst(); }
+}
+
+// ============================================================
 // RESET
 // ============================================================
 function resetProgress() {
@@ -2782,9 +3150,11 @@ function resetProgress() {
   STATE.pron = { unlocked: 1, stars: {} };
   STATE.verb = { unlocked: 1, stars: {} };
   STATE.adv = { unlocked: 1, stars: {} };
+  STATE.prep = { unlocked: 1, stars: {} };
+  STATE.conj = { unlocked: 1, stars: {} };
   saveState(); updateUI();
   resetCP(); resetColl(); resetAbs(); resetGender(); resetNum(); resetCount();
-  adjBackToMap(); artBackToMap(); pronBackToMap(); verbBackToMap(); advBackToMap();
+  adjBackToMap(); artBackToMap(); pronBackToMap(); verbBackToMap(); advBackToMap(); prepBackToMap(); conjBackToMap();
   document.getElementById('quizArea').innerHTML = `<div style="text-align:center;padding:30px 0;color:var(--text-muted);"><span style="font-size:3rem;">🎮</span><p style="margin-top:10px;">Pick a game above to start playing!</p></div>`;
 }
 
@@ -2831,7 +3201,9 @@ if (!STATE.art) STATE.art = { unlocked: 1, stars: {} };
 if (!STATE.pron) STATE.pron = { unlocked: 1, stars: {} };
 if (!STATE.verb) STATE.verb = { unlocked: 1, stars: {} };
 if (!STATE.adv) STATE.adv = { unlocked: 1, stars: {} };
-renderAdjMap(); renderArtMap(); renderPronMap(); renderVerbMap(); renderAdvMap();
+if (!STATE.prep) STATE.prep = { unlocked: 1, stars: {} };
+if (!STATE.conj) STATE.conj = { unlocked: 1, stars: {} };
+renderAdjMap(); renderArtMap(); renderPronMap(); renderVerbMap(); renderAdvMap(); renderPrepMap(); renderConjMap();
 
 // Sync sound + grade controls with saved state
 document.getElementById('soundIcon').textContent = STATE.soundOn ? '🔊' : '🔇';
