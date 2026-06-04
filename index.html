@@ -230,6 +230,9 @@
     .concept-card p, .concept-card li { color:var(--text); font-size:0.95rem; line-height:1.6; }
     .concept-card .eg { color:var(--text-muted); font-size:0.88rem; margin-top:8px; font-style:italic; }
     .concept-card b { color:#fff; }
+    .btn-hint { background:rgba(255,217,61,0.15); color:var(--accent); }
+    .btn-hint:hover { background:rgba(255,217,61,0.28); }
+    .hint-box { margin-top:10px; padding:11px 15px; border-radius:12px; background:rgba(255,217,61,0.1); border:1px solid rgba(255,217,61,0.3); color:var(--accent); font-size:0.92rem; font-weight:500; animation:fadeSlideUp 0.3s ease; }
 
     .text-input { padding:11px 16px; border-radius:30px; border:2px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.05); color:var(--text); font-size:0.95rem; font-family:inherit; min-width:200px; flex:1; }
     .text-input:focus { outline:none; border-color:var(--primary); background:rgba(108,99,255,0.08); }
@@ -306,6 +309,7 @@
     <button class="tab-btn" data-tab="number">🔢 Number</button>
     <button class="tab-btn" data-tab="countable">📦 Countable/Uncountable</button>
     <button class="tab-btn" data-tab="adjectives">🎨 Adjectives</button>
+    <button class="tab-btn" data-tab="articles">🅰️ Articles</button>
     <button class="tab-btn" data-tab="arcade">🕹️ Arcade</button>
     <button class="tab-btn" data-tab="quiz">🎮 Quiz Games</button>
     <button class="tab-btn" data-tab="class">🖨️ Classroom</button>
@@ -671,6 +675,30 @@
       <div id="adjPlay" style="display:none;"></div>
     </div>
 
+    <!-- ==================== ARTICLES ==================== -->
+    <div class="page" id="page-articles">
+      <h2><span class="emoji">🅰️</span> Articles — Level Adventure</h2>
+      <div id="artHome">
+        <div class="info-box green"><span class="label">🎯 Your Mission</span>The little words <strong>a</strong>, <strong>an</strong> and <strong>the</strong> are <strong>Articles</strong>. <strong>a/an</strong> = any one (Indefinite); <strong>the</strong> = a particular one (Definite). Clear all <strong>8 levels</strong> to become an <strong>Article Ace</strong>! 👑 Stuck? Tap <strong>💡 Hint</strong> on any question.</div>
+        <div style="text-align:center;margin:10px 0;">
+          <button class="btn btn-small btn-success" onclick="toggleArtLearn()">📖 Learn Articles</button>
+        </div>
+        <div class="concept-card" id="artLearn" style="display:none;">
+          <h3>📖 Articles — Quick Guide</h3>
+          <p>There are two articles: <b>a / an</b> (Indefinite — any one) and <b>the</b> (Definite — a particular one).</p>
+          <p style="margin-top:8px;"><b>a or an? — go by SOUND:</b></p>
+          <ul style="margin:6px 0 0 18px;line-height:1.8;">
+            <li><b>an</b> before a <b>vowel sound</b>: an apple, an egg, an hour, an honest man</li>
+            <li><b>a</b> before a <b>consonant sound</b>: a boy, a university (yu-), a one-rupee note (w-)</li>
+          </ul>
+          <p style="margin-top:10px;"><b>Use "the":</b> for a particular/already-known thing (the book you want); unique things (the sun, the sky); whole class (the cow is useful); superlatives (the best); ordinals (the first); instruments (the flute); rivers/seas/ranges/holy books (the Ganga, the Himalayas, the Ramayana).</p>
+          <p style="margin-top:10px;"><b>No article:</b> uncountable/abstract in general (Gold is precious), plurals in general (Children like sweets), meals (have lunch), languages (speak English), and school/bed/church/hospital used for their purpose (go to school).</p>
+        </div>
+        <div class="level-map" id="artMap"></div>
+      </div>
+      <div id="artPlay" style="display:none;"></div>
+    </div>
+
     <!-- ==================== ARCADE ==================== -->
     <div class="page" id="page-arcade">
       <h2><span class="emoji">🕹️</span> Arcade Games</h2>
@@ -788,6 +816,7 @@ const STATE = {
   cpIndex: 0, collIndex: 0, absIndex: 0, countIndex: 0, genderIndex: 0, numIndex: 0,
   soundOn: true, grade: 'senior', voiceURI: '', rate: 0.9,
   adj: { unlocked: 1, stars: {} },
+  art: { unlocked: 1, stars: {} },
 };
 
 function loadState() {
@@ -1972,6 +2001,179 @@ function finishAdjLevel() {
 }
 
 // ============================================================
+// ARTICLES — 8-LEVEL ADVENTURE (with hints)
+// ============================================================
+const ART_LEVELS = [
+  { icon:'🔤', short:'a · an · the', title:'The Two Articles',
+    concept:'Articles are <b>a</b>, <b>an</b> and <b>the</b>. <b>a / an</b> = the <b>Indefinite</b> article (any one). <b>the</b> = the <b>Definite</b> article (a particular one).',
+    eg:'a doctor = any doctor · the doctor = a particular doctor',
+    questions:[
+      { q:'Which is the Definite Article?', options:['a','an','the','one'], answer:2, hint:'Definite = points out a PARTICULAR thing.', explain:'"the" points out a particular one.' },
+      { q:'"He saw ___ doctor." (a particular doctor we know)', options:['a','an','the','—'], answer:2, hint:'A particular, known one → the.', explain:'Particular doctor → the.' },
+      { q:'"I want ___ apple." (any apple)', options:['a','an','the','—'], answer:1, hint:'Any one + a vowel sound.', explain:'Any apple → an (vowel sound).' },
+      { q:'"a doctor" means...', options:['a particular doctor','any doctor','the best doctor','no doctor'], answer:1, hint:'a / an leaves it indefinite.', explain:'a/an = any one.' },
+      { q:'The indefinite article (a/an) is used before...', options:['plural nouns','singular countable nouns','uncountable nouns','proper nouns'], answer:1, hint:'You can count one of them.', explain:'a/an → singular countable nouns.' },
+      { q:'Which article can point out a particular thing already mentioned?', options:['a','an','the','—'], answer:2, hint:'The one we already talked about.', explain:'the = definite/particular.' },
+    ]},
+  { icon:'🔊', short:'a or an?', title:'a or an? (Go by Sound)',
+    concept:'Choose by <b>sound</b>, not spelling. <b>an</b> before a <b>vowel sound</b>; <b>a</b> before a <b>consonant sound</b>. Watch out: an <b>hour</b> (silent h), a <b>university</b> (yu- sound), a <b>one</b>-rupee note (w- sound).',
+    eg:'an egg · an honest man · a useful book · a European',
+    questions:[
+      { q:'___ apple', options:['a','an'], answer:1, hint:'"apple" starts with a vowel sound.', explain:'vowel sound → an.' },
+      { q:'___ hour', options:['a','an'], answer:1, hint:'The "h" is silent → it sounds like a vowel.', explain:'silent h → an hour.' },
+      { q:'___ university', options:['a','an'], answer:0, hint:'It sounds like "yu-niversity" (consonant sound).', explain:'"yu" sound → a university.' },
+      { q:'___ honest man', options:['a','an'], answer:1, hint:'Silent h → vowel sound.', explain:'an honest man.' },
+      { q:'___ European', options:['a','an'], answer:0, hint:'Sounds like "yu-ropean".', explain:'"yu" sound → a European.' },
+      { q:'___ one-rupee note', options:['a','an'], answer:0, hint:'"one" sounds like "wun" (w = consonant).', explain:'w- sound → a one-rupee note.' },
+      { q:'___ umbrella', options:['a','an'], answer:1, hint:'Starts with a vowel sound.', explain:'an umbrella.' },
+      { q:'___ useful article', options:['a','an'], answer:0, hint:'"useful" = "yu-seful".', explain:'"yu" sound → a useful article.' },
+    ]},
+  { icon:'🎯', short:'the: particular', title:'"The" — Particular & Unique',
+    concept:'Use <b>the</b> for a <b>particular</b> thing, one <b>already mentioned</b>, or things that are <b>one of a kind</b> (the sun, the sky, the earth).',
+    eg:'The book you want · the sun · I have a dog. The dog is black.',
+    questions:[
+      { q:'"___ sun rises in the east."', options:['A','An','The','—'], answer:2, hint:'There is only ONE sun → unique.', explain:'the sun (unique).' },
+      { q:'"I have a dog. ___ dog is black."', options:['A','An','The','—'], answer:2, hint:'The dog was already mentioned.', explain:'Already mentioned → The.' },
+      { q:'Which one is correct?', options:['a sky','an sky','the sky','sky'], answer:2, hint:'Only one sky → unique.', explain:'the sky.' },
+      { q:'"Let\'s go to ___ park." (the park in our town)', options:['a','an','the','—'], answer:2, hint:'A particular park we both know.', explain:'the park.' },
+      { q:'Why do we say "the book you want"?', options:['it is unique','it is a particular one','it is plural','it is uncountable'], answer:1, hint:'Which book? The one you want.', explain:'A particular, specified book → the.' },
+      { q:'"The earth moves round ___ sun."', options:['a','an','the','—'], answer:2, hint:'Unique object.', explain:'the sun.' },
+    ]},
+  { icon:'🏆', short:'the: class/best', title:'"The" — Whole Class, Best, First',
+    concept:'Use <b>the</b> with a singular noun for a <b>whole class</b> (The cow is useful), with <b>superlatives</b> (the best), with <b>ordinals</b> (the first), and with <b>musical instruments</b> (play the flute).',
+    eg:'The cow is a useful animal · the best book · the first man · play the piano',
+    questions:[
+      { q:'"___ cow is a useful animal." (the whole class)', options:['A','An','The','—'], answer:2, hint:'One noun standing for the whole class.', explain:'The cow = all cows.' },
+      { q:'"This is ___ best book in the shop."', options:['a','an','the','—'], answer:2, hint:'"best" is a superlative.', explain:'Superlative → the best.' },
+      { q:'"He was ___ first man to arrive."', options:['a','an','the','—'], answer:2, hint:'"first" is an ordinal.', explain:'Ordinal → the first.' },
+      { q:'"He can play ___ flute."', options:['a','an','the','—'], answer:2, hint:'Musical instruments take "the".', explain:'play the flute.' },
+      { q:'"___ rose is the sweetest of all flowers."', options:['A','An','The','—'], answer:2, hint:'Whole class of roses.', explain:'The rose = all roses.' },
+      { q:'In "the darkest cloud", why "the"?', options:['it is unique','it is a superlative','it is plural','it is a name'], answer:1, hint:'"darkest" ends in -est.', explain:'Superlative → the.' },
+    ]},
+  { icon:'🗺️', short:'the: names', title:'"The" with Names',
+    concept:'Use <b>the</b> before <b>rivers, seas/oceans, deserts, island groups, mountain ranges</b> and certain <b>holy books</b> — the Ganga, the Pacific, the Sahara, the Himalayas, the Ramayana. But <b>NOT</b> before single mountains (Everest), countries (India) or cities.',
+    eg:'the Ganga · the Himalayas · the Ramayana — but Mount Everest, India',
+    questions:[
+      { q:'"___ Ganga is a sacred river."', options:['A','An','The','—'], answer:2, hint:'Rivers take "the".', explain:'the Ganga.' },
+      { q:'"___ Himalayas are very high."', options:['A','An','The','—'], answer:2, hint:'Mountain RANGES take "the".', explain:'the Himalayas.' },
+      { q:'"We climbed ___ Mount Everest."', options:['a','the','—','an'], answer:2, hint:'A single mountain takes no article.', explain:'Mount Everest → no article.' },
+      { q:'"He sailed across ___ Pacific."', options:['a','an','the','—'], answer:2, hint:'Oceans/seas take "the".', explain:'the Pacific.' },
+      { q:'"I visited ___ India last year."', options:['a','the','—','an'], answer:2, hint:'Most country names take no article.', explain:'India → no article.' },
+      { q:'"She read ___ Ramayana."', options:['a','an','the','—'], answer:2, hint:'Certain holy books take "the".', explain:'the Ramayana.' },
+    ]},
+  { icon:'🚫', short:'no article', title:'Leaving Out the Article',
+    concept:'Use <b>no article</b> before: uncountable/abstract nouns in general (Gold is precious), plural nouns in general (Children like sweets), <b>meals</b> (have lunch), <b>languages</b> (speak English), and <b>school/bed/church/hospital</b> used for their purpose (go to school, in hospital).',
+    eg:'Honesty is the best policy · have lunch · speak English · go to bed',
+    questions:[
+      { q:'"___ Gold is a precious metal."', options:['A','The','—','An'], answer:2, hint:'Uncountable noun used generally.', explain:'No article: Gold (general).' },
+      { q:'"___ Honesty is the best policy."', options:['A','An','The','—'], answer:3, hint:'Abstract noun used generally.', explain:'No article before Honesty.' },
+      { q:'"We go to ___ church on Sundays."', options:['a','the','—','an'], answer:2, hint:'Church used for worship → no article.', explain:'go to church (its purpose).' },
+      { q:'"What time do you have ___ lunch?"', options:['a','an','the','—'], answer:3, hint:'Names of meals take no article.', explain:'have lunch.' },
+      { q:'"They speak ___ English at home."', options:['a','an','the','—'], answer:3, hint:'Languages take no article.', explain:'speak English.' },
+      { q:'"My uncle is in ___ hospital." (as a patient)', options:['a','the','—','an'], answer:2, hint:'Hospital used for its purpose → no article.', explain:'in hospital.' },
+      { q:'"Children like ___ chocolates."', options:['a','the','—','an'], answer:2, hint:'Plural noun in a general sense.', explain:'No article (general).' },
+    ]},
+  { icon:'✨', short:'a/an uses', title:'Special Uses of a / an',
+    concept:'<b>a / an</b> can mean <b>one</b> (Twelve inches make a foot), <b>a certain</b> (One evening a beggar came), <b>any / each</b> (A cow is a useful animal), and can turn a proper noun into a common one (A Daniel = a very wise man).',
+    eg:'Not a word · a certain man · A pupil should obey his teacher',
+    questions:[
+      { q:'"Twelve inches make ___ foot."', options:['a','an','the','—'], answer:0, hint:'Here a = one.', explain:'a = one foot.' },
+      { q:'"Not ___ word was said."', options:['a','an','the','—'], answer:0, hint:'a = one (not even one).', explain:'a = one word.' },
+      { q:'"___ pupil should obey his teacher." (any pupil)', options:['A','An','The','—'], answer:0, hint:'a = any one, standing for the class.', explain:'A pupil = any pupil.' },
+      { q:'"He is ___ Daniel come to judgement!"', options:['a','an','the','—'], answer:0, hint:'a + a name = a person like that.', explain:'a Daniel = a wise man.' },
+      { q:'"One evening ___ beggar came to my door."', options:['a','an','the','—'], answer:0, hint:'a = a certain.', explain:'a (a certain beggar).' },
+      { q:'"___ bird in the hand is worth two in the bush."', options:['A','An','The','—'], answer:0, hint:'a = one, as a general truth.', explain:'A bird...' },
+    ]},
+  { icon:'👑', short:'BOSS', title:'Boss Level — Article Ace',
+    concept:'Fill the blank with <b>a</b>, <b>an</b>, <b>the</b>, or <b>—</b> (no article). Use everything you have learned. Pass to become an <b>Article Ace</b>! 👑',
+    eg:'',
+    questions:[
+      { q:'"Copper is ___ useful metal."', options:['a','an','the','—'], answer:0, hint:'"useful" sounds like "yu-" → a.', explain:'a useful metal.' },
+      { q:'"He is ___ honourable man."', options:['a','an','the','—'], answer:1, hint:'Silent h → vowel sound.', explain:'an honourable man.' },
+      { q:'"___ lion is ___ king of beasts."', options:['The … the','A … a','The … a','— … the'], answer:0, hint:'Whole class + a unique title.', explain:'The lion is the king of beasts.' },
+      { q:'"Sanskrit is ___ difficult language."', options:['a','an','the','—'], answer:0, hint:'"difficult" starts with a consonant sound.', explain:'a difficult language.' },
+      { q:'"Mumbai is ___ largest cotton centre in the country."', options:['a','an','the','—'], answer:2, hint:'"largest" is a superlative.', explain:'the largest...' },
+      { q:'"He returned after ___ hour."', options:['a','an','the','—'], answer:1, hint:'Silent h → an.', explain:'after an hour.' },
+      { q:'"Honesty is ___ best policy."', options:['a','an','the','—'], answer:2, hint:'"best" is a superlative.', explain:'the best policy.' },
+      { q:'"We are studying ___ English."', options:['a','an','the','—'], answer:3, hint:'Languages take no article.', explain:'studying English.' },
+      { q:'"He can play ___ violin."', options:['a','an','the','—'], answer:2, hint:'Musical instruments take "the".', explain:'play the violin.' },
+      { q:'"___ Andamans are a group of islands."', options:['A','An','The','—'], answer:2, hint:'Groups of islands take "the".', explain:'The Andamans.' },
+    ]},
+];
+
+let artState = null;
+function renderArtMap() {
+  const map = document.getElementById('artMap'); if (!map) return;
+  const unlocked = STATE.art.unlocked || 1;
+  map.innerHTML = ART_LEVELS.map((lv, i) => {
+    const n = i + 1, best = STATE.art.stars[n] || 0;
+    let cls = best > 0 ? 'done' : (n <= unlocked ? 'unlocked' : 'locked');
+    const stars = best > 0 ? '⭐'.repeat(best) + '☆'.repeat(3 - best) : (cls === 'locked' ? '🔒' : '• • •');
+    const lock = cls === 'locked' ? '<span class="lock-ic">🔒</span>' : '';
+    const click = cls === 'locked' ? '' : `onclick="openArtLevel(${n})"`;
+    return `<div class="level-node ${cls}" ${click}>${lock}<span class="lvl-num">${lv.icon}</span><span class="lvl-name">${n}. ${lv.short}</span><span class="lvl-stars">${stars}</span></div>`;
+  }).join('');
+}
+function toggleArtLearn() {
+  const el = document.getElementById('artLearn');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+function artBackToMap() {
+  document.getElementById('artPlay').style.display = 'none';
+  document.getElementById('artHome').style.display = 'block';
+  renderArtMap();
+}
+function openArtLevel(n) {
+  const lv = ART_LEVELS[n - 1]; if (!lv) return;
+  document.getElementById('artHome').style.display = 'none';
+  const play = document.getElementById('artPlay'); play.style.display = 'block';
+  artState = { level:n, qIndex:0, correct:0, total:lv.questions.length, answered:false };
+  play.innerHTML = `
+    <div class="game-hud"><button class="back-btn" onclick="artBackToMap()">← Map</button><span class="hud-target">${lv.icon} Level ${n}: ${lv.title}</span></div>
+    <div class="concept-card"><h3>${lv.icon} ${lv.title}</h3><p>${lv.concept}</p>${lv.eg ? `<div class="eg">${lv.eg}</div>` : ''}</div>
+    <div id="artQ"></div>`;
+  speak(lv.title + '. ' + lv.concept.replace(/<[^>]+>/g, ''));
+  renderArtQ();
+}
+function renderArtQ() {
+  const lv = ART_LEVELS[artState.level - 1], i = artState.qIndex;
+  if (i >= lv.questions.length) { finishArtLevel(); return; }
+  artState.answered = false;
+  const q = lv.questions[i];
+  const opts = q.options.map((o, idx) => `<button class="option-btn" data-idx="${idx}" onclick="answerArt(${idx})">${o}</button>`).join('');
+  const hintBtn = q.hint ? `<div style="margin-top:10px;"><button class="btn btn-small btn-hint" onclick="showArtHint()">💡 Hint</button></div><div class="hint-box" id="artHint" style="display:none;"></div>` : '';
+  document.getElementById('artQ').innerHTML = `<div class="exercise-card"><div class="q">${q.q}</div><div class="options">${opts}</div>${hintBtn}<div class="feedback" id="artFb"></div><div style="margin-top:12px;text-align:right;"><span style="color:var(--text-muted);font-size:0.85rem;">Question ${i + 1}/${lv.questions.length}</span><div class="progress-bar"><div class="fill" style="width:${(i / lv.questions.length) * 100}%;"></div></div></div></div>`;
+}
+function showArtHint() {
+  const q = ART_LEVELS[artState.level - 1].questions[artState.qIndex];
+  const box = document.getElementById('artHint');
+  if (box && q.hint) { box.textContent = '💡 ' + q.hint; box.style.display = 'block'; }
+}
+function answerArt(idx) {
+  if (artState.answered) return; artState.answered = true;
+  const lv = ART_LEVELS[artState.level - 1], q = lv.questions[artState.qIndex], correct = q.answer;
+  const fb = document.getElementById('artFb');
+  document.querySelectorAll('#artQ .option-btn').forEach(b => { b.disabled = true; const bi = parseInt(b.dataset.idx); if (bi === correct) b.classList.add('correct'); else if (bi === idx && idx !== correct) b.classList.add('wrong'); });
+  if (idx === correct) { fb.className = 'feedback correct show'; fb.textContent = '✅ Correct! ' + (q.explain || ''); artState.correct++; addStar(); fireConfetti(8); checkBadges(); }
+  else { fb.className = 'feedback wrong show'; fb.textContent = '❌ ' + (q.explain || ('Answer: ' + q.options[correct])); addWrong(); }
+  artState.qIndex++; saveState(); setTimeout(renderArtQ, 1200);
+}
+function finishArtLevel() {
+  const n = artState.level, pct = Math.round((artState.correct / artState.total) * 100), stars = adjStars(pct);
+  if (stars > (STATE.art.stars[n] || 0)) STATE.art.stars[n] = stars;
+  const passed = stars >= 1;
+  if (passed && n < 8 && (STATE.art.unlocked || 1) < n + 1) STATE.art.unlocked = n + 1;
+  saveState();
+  const starRow = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  let next = '';
+  if (passed && n < 8) next = `<button class="btn btn-primary" onclick="openArtLevel(${n + 1})">▶️ Next Level</button> `;
+  else if (!passed) next = `<button class="btn btn-primary" onclick="openArtLevel(${n})">🔄 Try Again</button> `;
+  const boss = (passed && n === 8) ? '<p style="color:var(--accent);font-weight:800;font-size:1.1rem;margin-top:6px;">👑 You are an ARTICLE ACE!</p>' : '';
+  document.getElementById('artPlay').innerHTML = `<div class="result-box"><div class="big">${passed ? (n === 8 ? '👑' : '🎉') : '💪'}</div><div class="score-text">Level ${n} ${passed ? 'Complete!' : '— Try again!'}</div><div style="font-size:1.9rem;margin:6px 0;">${starRow}</div><p>You got <strong>${artState.correct}</strong>/<strong>${artState.total}</strong> (${pct}%)</p>${boss}<p style="color:var(--text-muted);font-size:0.85rem;">${passed ? 'Tip: score 90%+ for all 3 stars!' : 'Get at least half right to unlock the next level.'}</p><div style="margin-top:14px;">${next}<button class="btn btn-small btn-success" onclick="artBackToMap()">🗺️ Level Map</button></div></div>`;
+  if (passed) { fireConfetti(stars >= 3 ? 40 : 20); playFanfare(); if (stars >= 3) showStarBurst(); }
+}
+
+// ============================================================
 // RESET
 // ============================================================
 function resetProgress() {
@@ -1981,9 +2183,10 @@ function resetProgress() {
   STATE.badges = { badge1:false, badge2:false, badge3:false, badge4:false, badge5:false };
   STATE.cpIndex = 0; STATE.collIndex = 0; STATE.absIndex = 0; STATE.countIndex = 0; STATE.genderIndex = 0; STATE.numIndex = 0;
   STATE.adj = { unlocked: 1, stars: {} };
+  STATE.art = { unlocked: 1, stars: {} };
   saveState(); updateUI();
   resetCP(); resetColl(); resetAbs(); resetGender(); resetNum(); resetCount();
-  adjBackToMap();
+  adjBackToMap(); artBackToMap();
   document.getElementById('quizArea').innerHTML = `<div style="text-align:center;padding:30px 0;color:var(--text-muted);"><span style="font-size:3rem;">🎮</span><p style="margin-top:10px;">Pick a game above to start playing!</p></div>`;
 }
 
@@ -2026,7 +2229,8 @@ function resetProgress() {
 loadState();
 renderCP(); renderColl(); renderAbs(); renderGender(); renderNum(); renderCount();
 if (!STATE.adj) STATE.adj = { unlocked: 1, stars: {} };
-renderAdjMap();
+if (!STATE.art) STATE.art = { unlocked: 1, stars: {} };
+renderAdjMap(); renderArtMap();
 
 // Sync sound + grade controls with saved state
 document.getElementById('soundIcon').textContent = STATE.soundOn ? '🔊' : '🔇';
