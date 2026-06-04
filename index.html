@@ -310,6 +310,8 @@
     <button class="tab-btn" data-tab="countable">📦 Countable/Uncountable</button>
     <button class="tab-btn" data-tab="adjectives">🎨 Adjectives</button>
     <button class="tab-btn" data-tab="articles">🅰️ Articles</button>
+    <button class="tab-btn" data-tab="pronouns">🧑 Pronouns</button>
+    <button class="tab-btn" data-tab="verbs">🏃 Verbs</button>
     <button class="tab-btn" data-tab="arcade">🕹️ Arcade</button>
     <button class="tab-btn" data-tab="quiz">🎮 Quiz Games</button>
     <button class="tab-btn" data-tab="class">🖨️ Classroom</button>
@@ -699,6 +701,56 @@
       <div id="artPlay" style="display:none;"></div>
     </div>
 
+    <!-- ==================== PRONOUNS ==================== -->
+    <div class="page" id="page-pronouns">
+      <h2><span class="emoji">🧑</span> Pronouns — Level Adventure</h2>
+      <div id="pronHome">
+        <div class="info-box"><span class="label">🎯 Your Mission</span>A <strong>Pronoun</strong> is a word used <strong>instead of a noun</strong>, so we don't repeat it. <em>"Hari is ill, so <strong>he</strong> stays home."</em> Clear all <strong>10 levels</strong> to become a <strong>Pronoun Pro</strong>! 👑 Stuck? Tap <strong>💡 Hint</strong>.</div>
+        <div style="text-align:center;margin:10px 0;">
+          <button class="btn btn-small btn-success" onclick="togglePronLearn()">📖 Learn Pronouns</button>
+        </div>
+        <div class="concept-card" id="pronLearn" style="display:none;">
+          <h3>📖 Pronouns — Quick Guide</h3>
+          <p>A <b>Pronoun</b> stands in place of a noun (pro-noun = "for a noun").</p>
+          <p style="margin-top:8px;"><b>Personal pronouns</b> — three persons:</p>
+          <ul style="margin:6px 0 0 18px;line-height:1.8;">
+            <li>1st (speaker): <b>I, we</b> · 2nd (spoken to): <b>you</b> · 3rd (spoken of): <b>he, she, it, they</b></li>
+            <li><b>Subject</b> (doer): I, he, she, we, they · <b>Object</b> (receiver): me, him, her, us, them</li>
+            <li><b>Possessive</b>: my/mine, your/yours, his, her/hers, our/ours, their/theirs, its</li>
+          </ul>
+          <p style="margin-top:10px;"><b>More kinds:</b> <b>Reflexive/Emphatic</b> (myself, himself, themselves), <b>Demonstrative</b> (this, that, these, those), <b>Indefinite</b> (someone, anyone, nobody, all), <b>Distributive</b> (each, either, neither), <b>Relative</b> (who, which, that, whose, what), <b>Interrogative</b> (who? whom? whose? which? what?).</p>
+          <p style="margin-top:10px;"><b>Golden rule:</b> a pronoun must match its noun in <b>number, gender &amp; person</b> — Rama → he, Sita → she, birds → they.</p>
+        </div>
+        <div class="level-map" id="pronMap"></div>
+      </div>
+      <div id="pronPlay" style="display:none;"></div>
+    </div>
+
+    <!-- ==================== VERBS ==================== -->
+    <div class="page" id="page-verbs">
+      <h2><span class="emoji">🏃</span> Verbs — Level Adventure</h2>
+      <div id="verbHome">
+        <div class="info-box orange"><span class="label">🎯 Your Mission</span>A <strong>Verb</strong> is a word that <strong>tells or asserts</strong> something about a person or thing — usually a <strong>doing</strong> or <strong>being</strong> word. <em>Hari <strong>laughs</strong>. The cat <strong>is</strong> black.</em> Clear all <strong>6 levels</strong> to become a <strong>Verb Victor</strong>! 👑 Tap <strong>💡 Hint</strong> if stuck. <em>(More advanced verbs coming soon!)</em></div>
+        <div style="text-align:center;margin:10px 0;">
+          <button class="btn btn-small btn-success" onclick="toggleVerbLearn()">📖 Learn Verbs</button>
+        </div>
+        <div class="concept-card" id="verbLearn" style="display:none;">
+          <h3>📖 Verbs — Quick Guide</h3>
+          <p>A <b>Verb</b> tells or asserts something about a person or thing. It can tell:</p>
+          <ul style="margin:6px 0 0 18px;line-height:1.8;">
+            <li>what someone <b>does</b> — Hari <i>laughs</i></li>
+            <li>what is <b>done</b> to them — the window <i>is broken</i></li>
+            <li>what someone <b>is</b> — glass <i>is</i> brittle</li>
+          </ul>
+          <p style="margin-top:10px;">A verb can be <b>more than one word</b>: <i>were singing, has been found</i>.</p>
+          <p style="margin-top:10px;"><b>Transitive</b> = its action passes over to an <b>object</b> (kicks <i>the ball</i>). <b>Intransitive</b> = the action stops with the doer (the baby <i>sleeps</i>). Some verbs take two objects — an <b>indirect</b> (person) and a <b>direct</b> (thing): gave <i>him a watch</i>.</p>
+          <p style="margin-top:10px;"><b>Linking verbs</b> (is, seem, become, grow, look) need a <b>complement</b> to complete the meaning: the baby seems <i>happy</i>.</p>
+        </div>
+        <div class="level-map" id="verbMap"></div>
+      </div>
+      <div id="verbPlay" style="display:none;"></div>
+    </div>
+
     <!-- ==================== ARCADE ==================== -->
     <div class="page" id="page-arcade">
       <h2><span class="emoji">🕹️</span> Arcade Games</h2>
@@ -817,6 +869,8 @@ const STATE = {
   soundOn: true, grade: 'senior', voiceURI: '', rate: 0.9,
   adj: { unlocked: 1, stars: {} },
   art: { unlocked: 1, stars: {} },
+  pron: { unlocked: 1, stars: {} },
+  verb: { unlocked: 1, stars: {} },
 };
 
 function loadState() {
@@ -2174,6 +2228,348 @@ function finishArtLevel() {
 }
 
 // ============================================================
+// PRONOUNS — 10-LEVEL ADVENTURE (with hints)
+// ============================================================
+const PRON_LEVELS = [
+  { icon:'🔁', short:'What is it?', title:'What is a Pronoun?',
+    concept:'A <b>Pronoun</b> is a word used <b>instead of a noun</b>, so we do not keep repeating it. <em>Hari is absent because <b>he</b> is ill.</em> ("Pronoun" means "for a noun".)',
+    eg:'Hari → he · Sita → she · the book → it · the boys → they',
+    questions:[
+      { q:'Find the pronoun: "Hari is absent because he is ill."', options:['Hari','absent','he','ill'], answer:2, hint:'Which word stands in place of "Hari"?', explain:'"he" is used instead of "Hari".' },
+      { q:'A pronoun is used instead of a...', options:['verb','noun','adjective','article'], answer:1, hint:'pro-noun = "for a noun".', explain:'A pronoun replaces a noun.' },
+      { q:'"Sita helps her mother. ___ does her lesson too."', options:['He','She','It','They'], answer:1, hint:'Sita is a girl.', explain:'Sita → She.' },
+      { q:'"The boys saw a snake, and ___ ran away."', options:['he','it','they','she'], answer:2, hint:'More than one boy.', explain:'boys → they.' },
+      { q:'Which word is a pronoun?', options:['book','they','run','happy'], answer:1, hint:'Which one could replace a name?', explain:'"they" is a pronoun.' },
+      { q:'Why do we use pronouns?', options:['to add colour','to avoid repeating the noun','to ask questions','to count things'], answer:1, hint:'So we don\'t say the name again and again.', explain:'They avoid repetition.' },
+    ]},
+  { icon:'👤', short:'3 persons', title:'Personal Pronouns — 3 Persons',
+    concept:'Personal pronouns stand for three persons: <b>1st</b> = the speaker (<b>I, we</b>); <b>2nd</b> = the one spoken to (<b>you</b>); <b>3rd</b> = the one spoken of (<b>he, she, it, they</b>).',
+    eg:'I / we · you · he, she, it, they',
+    questions:[
+      { q:'Which pronoun is FIRST person (the speaker)?', options:['you','he','I','they'], answer:2, hint:'The person who is talking.', explain:'"I" = first person.' },
+      { q:'"___ are my best friend." (the person spoken to)', options:['He','You','They','It'], answer:1, hint:'Second person = spoken to.', explain:'"You" = second person.' },
+      { q:'Which is THIRD person plural (people spoken of)?', options:['I','we','they','you'], answer:2, hint:'More than one, talked about.', explain:'"they" = third person plural.' },
+      { q:'"Rama is kind. ___ helps everyone."', options:['He','She','It','They'], answer:0, hint:'Rama is a boy, spoken of.', explain:'Rama → He.' },
+      { q:'Which pronoun is used for both singular and plural?', options:['I','you','he','she'], answer:1, hint:'It stays the same for one or many.', explain:'"you" = singular and plural.' },
+      { q:'"The pen fell. ___ is on the floor."', options:['He','She','It','They'], answer:2, hint:'A pen is a thing.', explain:'a thing → It.' },
+    ]},
+  { icon:'🎭', short:'Subject/Object', title:'Subject or Object? (I / me)',
+    concept:'<b>Subject</b> pronouns DO the action: <b>I, he, she, we, they</b>. <b>Object</b> pronouns RECEIVE it: <b>me, him, her, us, them</b>. After words like <i>to, for, and</i>, use the object form: <em>for you and me</em>.',
+    eg:'I see him · He helped us · a gift for you and me',
+    questions:[
+      { q:'"___ am very happy."', options:['I','Me'], answer:0, hint:'The doer of "am" → subject.', explain:'Subject → I.' },
+      { q:'"Please give the book to ___."', options:['I','me'], answer:1, hint:'After "to" → object form.', explain:'to me.' },
+      { q:'"He helped ___ with the work."', options:['I','me'], answer:1, hint:'Who received the help?', explain:'helped me.' },
+      { q:'"This present is for you and ___."', options:['I','me'], answer:1, hint:'After "for" → object form.', explain:'for you and me.' },
+      { q:'"___ are playing in the park." (the doers)', options:['They','Them'], answer:0, hint:'Subject (doer) form.', explain:'Subject → They.' },
+      { q:'"Wait for Hari and ___."', options:['I','me'], answer:1, hint:'After "for" → object.', explain:'for Hari and me.' },
+      { q:'"She and ___ are good friends."', options:['I','me'], answer:0, hint:'Subject of "are".', explain:'She and I.' },
+    ]},
+  { icon:'🔑', short:'Possessive', title:'Possessive Pronouns',
+    concept:'These show <b>belonging</b>. Before a noun: <b>my, your, his, her, our, their, its</b>. Standing alone: <b>mine, yours, his, hers, ours, theirs</b>.',
+    eg:'This is my book · This book is mine',
+    questions:[
+      { q:'"This is ___ book." (it belongs to me)', options:['my','mine','me','I'], answer:0, hint:'Before a noun → my.', explain:'my book.' },
+      { q:'"This book is ___." (it belongs to me)', options:['my','mine','me','I'], answer:1, hint:'Standing alone → mine.', explain:'is mine.' },
+      { q:'"That is ___ bag." (it belongs to her)', options:['hers','her','she','his'], answer:1, hint:'Before a noun, female owner.', explain:'her bag.' },
+      { q:'"Those books are ___." (they belong to you)', options:['your','yours','you','their'], answer:1, hint:'Stands alone → yours.', explain:'are yours.' },
+      { q:'"The dog wagged ___ tail."', options:['it\'s','its','his','their'], answer:1, hint:'Belonging — no apostrophe.', explain:'its tail.' },
+      { q:'"This pen is ___." (it belongs to him)', options:['him','he','his','her'], answer:2, hint:'"his" works alone too.', explain:'is his.' },
+    ]},
+  { icon:'🌧️', short:'"it"', title:'The Pronoun "it"',
+    concept:'<b>it</b> is used for things, for animals, for a young child, for the <b>weather/time</b>, and as a starter (<em>It is easy to...</em>).',
+    eg:'Take it away · It is raining · It is ten o\'clock',
+    questions:[
+      { q:'"Here is your book. Take ___ away."', options:['it','him','her','them'], answer:0, hint:'A book is a thing.', explain:'a thing → it.' },
+      { q:'"___ is raining heavily."', options:['He','It','They','That'], answer:1, hint:'Talking about the weather.', explain:'weather → It.' },
+      { q:'"___ is ten o\'clock now."', options:['It','He','That','This'], answer:0, hint:'Talking about the time.', explain:'time → It.' },
+      { q:'"The horse fell and broke ___ leg."', options:['his','her','its','their'], answer:2, hint:'Belonging to the animal.', explain:'its leg.' },
+      { q:'"___ is easy to find fault." (starter word)', options:['It','He','That','This'], answer:0, hint:'A starter "it" before the real subject.', explain:'It is easy...' },
+      { q:'"When I saw the baby, ___ was crying."', options:['he','she','it','they'], answer:2, hint:'A young child can be "it".', explain:'baby → it.' },
+    ]},
+  { icon:'✅', short:'Agreement', title:'Pronouns Must Agree',
+    concept:'A pronoun must <b>match its noun</b> in number, gender and person. Rama → he, Sita → she, the cow → it, boys → they. Two nouns joined by <b>and</b> → they. With <b>each/every</b> or <b>neither…nor</b> → singular.',
+    eg:'Rama is kind. He… · Birds build their nests.',
+    questions:[
+      { q:'"Sita is clever. ___ studies hard."', options:['He','She','It','They'], answer:1, hint:'Sita is female.', explain:'Sita → She.' },
+      { q:'"The birds built ___ nests in the tree."', options:['its','his','their','her'], answer:2, hint:'Birds = plural.', explain:'birds → their.' },
+      { q:'"Rama and Hari work hard. ___ are praised."', options:['He','She','It','They'], answer:3, hint:'Two people joined by "and".', explain:'→ They.' },
+      { q:'"The camel is strong. ___ carries goods."', options:['He','She','It','They'], answer:2, hint:'An animal (in general).', explain:'camel → It.' },
+      { q:'"Each soldier stood in ___ place."', options:['his','their','its','our'], answer:0, hint:'"Each" is singular.', explain:'each → his.' },
+      { q:'"Neither Abdul nor Karim did ___ lesson."', options:['his','their','its','our'], answer:0, hint:'neither…nor → singular.', explain:'→ his.' },
+    ]},
+  { icon:'🪞', short:'-self', title:'Reflexive & Emphatic (self)',
+    concept:'<b>-self / -selves</b> pronouns: myself, yourself, himself, herself, itself, ourselves, yourselves, themselves. <b>Reflexive</b> = the action turns back on the subject (<em>I hurt myself</em>). <b>Emphatic</b> = adds emphasis (<em>I myself saw it</em>).',
+    eg:'She hurt herself · They themselves admitted it',
+    questions:[
+      { q:'"I hurt ___ while playing."', options:['myself','himself','yourself','itself'], answer:0, hint:'I → my...', explain:'I → myself.' },
+      { q:'"They enjoyed ___ at the party."', options:['himself','themselves','ourselves','yourself'], answer:1, hint:'They → ...selves (plural).', explain:'They → themselves.' },
+      { q:'"She ___ said so."', options:['himself','itself','herself','myself'], answer:2, hint:'She → her...', explain:'She → herself.' },
+      { q:'"He hurt ___."', options:['himself','herself','itself','myself'], answer:0, hint:'He → him...', explain:'He → himself.' },
+      { q:'In "I myself saw him do it", "myself" is...', options:['Reflexive','Emphatic (emphasis)'], answer:1, hint:'It just stresses "I".', explain:'Emphatic — adds emphasis.' },
+      { q:'In "The boy hid himself", "himself" is...', options:['Reflexive (turns back)','Emphatic'], answer:0, hint:'He hid HIM = himself.', explain:'Reflexive — action turns back.' },
+      { q:'"You will hurt ___." (one person)', options:['yourself','yourselves','myself','itself'], answer:0, hint:'One "you" → singular.', explain:'singular you → yourself.' },
+    ]},
+  { icon:'👉', short:'Demonstr.', title:'Demonstrative Pronouns',
+    concept:'<b>this, that, these, those</b> used <b>instead of a noun</b> to point things out. <b>this/these</b> = near; <b>that/those</b> = far. <b>that/those of</b> avoids repeating a noun.',
+    eg:'This is mine · Those are sour · the climate of Delhi is like that of Pune',
+    questions:[
+      { q:'"___ is my book." (one, near me)', options:['This','Those','These','Them'], answer:0, hint:'Near + one.', explain:'near, singular → This.' },
+      { q:'"___ are sour." (those mangoes far away)', options:['This','That','Those','It'], answer:2, hint:'Far + many.', explain:'far, plural → Those.' },
+      { q:'"The climate of Delhi is like ___ of Pune."', options:['this','that','these','those'], answer:1, hint:'Stands for "the climate" (singular).', explain:'that of Pune.' },
+      { q:'"This sweet is better than ___." (the far one)', options:['this','these','that','those'], answer:2, hint:'The far one, singular.', explain:'→ that.' },
+      { q:'Which points to things NEAR you?', options:['this','that','those','them'], answer:0, hint:'Near = this.', explain:'this = near.' },
+      { q:'"The rivers of Asia are bigger than ___ of Europe."', options:['that','this','those','these'], answer:2, hint:'Stands for "the rivers" (plural, far).', explain:'those of Europe.' },
+    ]},
+  { icon:'🎲', short:'Indef/Distrib', title:'Indefinite & Distributive',
+    concept:'<b>Indefinite</b> pronouns point to no one in particular: someone, anyone, everyone, nobody, all, some, few, none, one. <b>Distributive</b> pronouns take one at a time (always singular): <b>each, either, neither</b>. <b>each other / one another</b> = reciprocal.',
+    eg:'Somebody is here · Each gets a prize · They help each other',
+    questions:[
+      { q:'"___ has stolen my watch!" (some unknown person)', options:['Somebody','Each','Either','Neither'], answer:0, hint:'An unknown person.', explain:'Indefinite → Somebody.' },
+      { q:'"___ was there to help the child." (not one person)', options:['Everybody','Nobody','Each','Either'], answer:1, hint:'Negative — not one person.', explain:'→ Nobody.' },
+      { q:'"___ of the boys gets a prize." (one at a time)', options:['All','Each','Few','Some'], answer:1, hint:'One at a time → distributive.', explain:'Each (singular).' },
+      { q:'"___ of these two roads leads to town."', options:['Either','All','None','Many'], answer:0, hint:'One OR the other of two.', explain:'Either = one of two.' },
+      { q:'"The two friends always help ___."', options:['themselves','each other','everyone','either'], answer:1, hint:'Each helps the other → reciprocal.', explain:'each other.' },
+      { q:'"___ of the two accusations is true." (not one, not the other)', options:['Either','Neither','Each','None'], answer:1, hint:'Negative of "either".', explain:'Neither.' },
+    ]},
+  { icon:'👑', short:'BOSS', title:'Boss — Relative & Interrogative',
+    concept:'<b>Relative</b> pronouns join sentences and point back: <b>who</b> (persons), <b>which</b> (things/animals), <b>that</b> (both), <b>whose</b> (belonging), <b>what</b> (= the thing which). <b>Interrogative</b> pronouns ask questions: <b>who? whom? whose? which? what?</b> Pass to become a <b>Pronoun Pro</b>! 👑',
+    eg:'the boy who works hard · Whose is this? · What do you want?',
+    questions:[
+      { q:'"This is the boy ___ works hard."', options:['which','who','what','whose'], answer:1, hint:'"who" is for persons.', explain:'who = persons.' },
+      { q:'"I found the pen ___ I had lost."', options:['who','whom','which','whose'], answer:2, hint:'"which" is for things.', explain:'which = things.' },
+      { q:'"___ is knocking at the door?" (asking about a person)', options:['Which','What','Who','Whose'], answer:2, hint:'Asking the name of a person.', explain:'Who (person).' },
+      { q:'"___ book is this?" (asking who owns it)', options:['Who','Whose','Which','What'], answer:1, hint:'Asking about belonging.', explain:'Whose = belonging.' },
+      { q:'"The man ___ is honest is trusted."', options:['which','what','who','whose'], answer:2, hint:'A man = a person.', explain:'who = person.' },
+      { q:'"___ do you prefer, tea or coffee?" (a choice)', options:['Who','Whose','Which','What'], answer:2, hint:'Choosing between things.', explain:'Which = selection.' },
+      { q:'"___ has happened is still not clear." (= the thing which)', options:['Who','What','Which','Whose'], answer:1, hint:'"what" = that which.', explain:'What = the thing which.' },
+      { q:'"This is the house ___ belongs to my uncle."', options:['who','whom','which','whose'], answer:2, hint:'A house is a thing.', explain:'which = thing.' },
+      { q:'"___ did you see at the fair?" (asking about a person, object)', options:['Whose','Which','Whom','What'], answer:2, hint:'Object of "see" → whom.', explain:'Whom (object).' },
+      { q:'Relative pronouns do two jobs — pronoun and...', options:['adjective','conjunction (joining)','verb','article'], answer:1, hint:'They JOIN two sentences.', explain:'They also join clauses.' },
+    ]},
+];
+
+let pronState = null;
+function renderPronMap() {
+  const map = document.getElementById('pronMap'); if (!map) return;
+  const unlocked = STATE.pron.unlocked || 1;
+  map.innerHTML = PRON_LEVELS.map((lv, i) => {
+    const n = i + 1, best = STATE.pron.stars[n] || 0;
+    let cls = best > 0 ? 'done' : (n <= unlocked ? 'unlocked' : 'locked');
+    const stars = best > 0 ? '⭐'.repeat(best) + '☆'.repeat(3 - best) : (cls === 'locked' ? '🔒' : '• • •');
+    const lock = cls === 'locked' ? '<span class="lock-ic">🔒</span>' : '';
+    const click = cls === 'locked' ? '' : `onclick="openPronLevel(${n})"`;
+    return `<div class="level-node ${cls}" ${click}>${lock}<span class="lvl-num">${lv.icon}</span><span class="lvl-name">${n}. ${lv.short}</span><span class="lvl-stars">${stars}</span></div>`;
+  }).join('');
+}
+function togglePronLearn() {
+  const el = document.getElementById('pronLearn');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+function pronBackToMap() {
+  document.getElementById('pronPlay').style.display = 'none';
+  document.getElementById('pronHome').style.display = 'block';
+  renderPronMap();
+}
+function openPronLevel(n) {
+  const lv = PRON_LEVELS[n - 1]; if (!lv) return;
+  document.getElementById('pronHome').style.display = 'none';
+  const play = document.getElementById('pronPlay'); play.style.display = 'block';
+  pronState = { level:n, qIndex:0, correct:0, total:lv.questions.length, answered:false };
+  play.innerHTML = `
+    <div class="game-hud"><button class="back-btn" onclick="pronBackToMap()">← Map</button><span class="hud-target">${lv.icon} Level ${n}: ${lv.title}</span></div>
+    <div class="concept-card"><h3>${lv.icon} ${lv.title}</h3><p>${lv.concept}</p>${lv.eg ? `<div class="eg">${lv.eg}</div>` : ''}</div>
+    <div id="pronQ"></div>`;
+  speak(lv.title + '. ' + lv.concept.replace(/<[^>]+>/g, ''));
+  renderPronQ();
+}
+function renderPronQ() {
+  const lv = PRON_LEVELS[pronState.level - 1], i = pronState.qIndex;
+  if (i >= lv.questions.length) { finishPronLevel(); return; }
+  pronState.answered = false;
+  const q = lv.questions[i];
+  const opts = q.options.map((o, idx) => `<button class="option-btn" data-idx="${idx}" onclick="answerPron(${idx})">${o}</button>`).join('');
+  const hintBtn = q.hint ? `<div style="margin-top:10px;"><button class="btn btn-small btn-hint" onclick="showPronHint()">💡 Hint</button></div><div class="hint-box" id="pronHint" style="display:none;"></div>` : '';
+  document.getElementById('pronQ').innerHTML = `<div class="exercise-card"><div class="q">${q.q}</div><div class="options">${opts}</div>${hintBtn}<div class="feedback" id="pronFb"></div><div style="margin-top:12px;text-align:right;"><span style="color:var(--text-muted);font-size:0.85rem;">Question ${i + 1}/${lv.questions.length}</span><div class="progress-bar"><div class="fill" style="width:${(i / lv.questions.length) * 100}%;"></div></div></div></div>`;
+}
+function showPronHint() {
+  const q = PRON_LEVELS[pronState.level - 1].questions[pronState.qIndex];
+  const box = document.getElementById('pronHint');
+  if (box && q.hint) { box.textContent = '💡 ' + q.hint; box.style.display = 'block'; }
+}
+function answerPron(idx) {
+  if (pronState.answered) return; pronState.answered = true;
+  const lv = PRON_LEVELS[pronState.level - 1], q = lv.questions[pronState.qIndex], correct = q.answer;
+  const fb = document.getElementById('pronFb');
+  document.querySelectorAll('#pronQ .option-btn').forEach(b => { b.disabled = true; const bi = parseInt(b.dataset.idx); if (bi === correct) b.classList.add('correct'); else if (bi === idx && idx !== correct) b.classList.add('wrong'); });
+  if (idx === correct) { fb.className = 'feedback correct show'; fb.textContent = '✅ Correct! ' + (q.explain || ''); pronState.correct++; addStar(); fireConfetti(8); checkBadges(); }
+  else { fb.className = 'feedback wrong show'; fb.textContent = '❌ ' + (q.explain || ('Answer: ' + q.options[correct])); addWrong(); }
+  pronState.qIndex++; saveState(); setTimeout(renderPronQ, 1200);
+}
+function finishPronLevel() {
+  const n = pronState.level, pct = Math.round((pronState.correct / pronState.total) * 100), stars = adjStars(pct);
+  if (stars > (STATE.pron.stars[n] || 0)) STATE.pron.stars[n] = stars;
+  const passed = stars >= 1;
+  if (passed && n < 10 && (STATE.pron.unlocked || 1) < n + 1) STATE.pron.unlocked = n + 1;
+  saveState();
+  const starRow = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  let next = '';
+  if (passed && n < 10) next = `<button class="btn btn-primary" onclick="openPronLevel(${n + 1})">▶️ Next Level</button> `;
+  else if (!passed) next = `<button class="btn btn-primary" onclick="openPronLevel(${n})">🔄 Try Again</button> `;
+  const boss = (passed && n === 10) ? '<p style="color:var(--accent);font-weight:800;font-size:1.1rem;margin-top:6px;">👑 You are a PRONOUN PRO!</p>' : '';
+  document.getElementById('pronPlay').innerHTML = `<div class="result-box"><div class="big">${passed ? (n === 10 ? '👑' : '🎉') : '💪'}</div><div class="score-text">Level ${n} ${passed ? 'Complete!' : '— Try again!'}</div><div style="font-size:1.9rem;margin:6px 0;">${starRow}</div><p>You got <strong>${pronState.correct}</strong>/<strong>${pronState.total}</strong> (${pct}%)</p>${boss}<p style="color:var(--text-muted);font-size:0.85rem;">${passed ? 'Tip: score 90%+ for all 3 stars!' : 'Get at least half right to unlock the next level.'}</p><div style="margin-top:14px;">${next}<button class="btn btn-small btn-success" onclick="pronBackToMap()">🗺️ Level Map</button></div></div>`;
+  if (passed) { fireConfetti(stars >= 3 ? 40 : 20); playFanfare(); if (stars >= 3) showStarBurst(); }
+}
+
+// ============================================================
+// VERBS — 6-LEVEL ADVENTURE (basics, with hints)
+// ============================================================
+const VERB_LEVELS = [
+  { icon:'🏃', short:'What is it?', title:'What is a Verb?',
+    concept:'A <b>Verb</b> is a word that <b>tells or asserts</b> something about a person or thing — often a <b>doing</b> word. <em>Hari <b>laughs</b>. The clock <b>strikes</b>.</em>',
+    eg:'run · sing · jump · is · eat',
+    questions:[
+      { q:'Find the verb: "Hari laughs."', options:['Hari','laughs'], answer:1, hint:'Which word is the action / doing word?', explain:'"laughs" is the verb.' },
+      { q:'Find the verb: "The clock strikes."', options:['The','clock','strikes'], answer:2, hint:'What does the clock DO?', explain:'"strikes" is the verb.' },
+      { q:'Which word is a verb?', options:['run','table','blue','quickly'], answer:0, hint:'Which one is an action?', explain:'"run" is a verb.' },
+      { q:'Find the verb: "Birds fly in the sky."', options:['Birds','fly','sky','in'], answer:1, hint:'What do birds do?', explain:'"fly" is the verb.' },
+      { q:'Find the verb: "The sun shines brightly."', options:['sun','shines','brightly','The'], answer:1, hint:'What does the sun do?', explain:'"shines" is the verb.' },
+      { q:'A verb is a word that...', options:['names a person or thing','tells or asserts something','describes a noun','points out a thing'], answer:1, hint:'It is the most important word in a sentence.', explain:'A verb tells/asserts something.' },
+    ]},
+  { icon:'💬', short:'What it tells', title:'What a Verb Tells',
+    concept:'A verb can tell: (1) what a person <b>does</b> (Hari laughs); (2) what is <b>done</b> to them (the window is broken); (3) what a person/thing <b>is</b> (glass is brittle).',
+    eg:'He runs · He is scolded · The cat is dead',
+    questions:[
+      { q:'"Hari kicks the ball." The verb tells us...', options:['what Hari does','what is done to Hari','what Hari is'], answer:0, hint:'Hari is doing the kicking.', explain:'It tells what Hari does.' },
+      { q:'"The window is broken." The verb tells us...', options:['what the window does','what is done to the window','where the window is'], answer:1, hint:'Something happened TO the window.', explain:'What is done to it.' },
+      { q:'"The cat is dead." The verb "is" tells us...', options:['what the cat does','what is done to the cat','what the cat is'], answer:2, hint:'It describes the cat\'s state.', explain:'What the cat is.' },
+      { q:'Find the verb: "Glass is brittle."', options:['Glass','is','brittle'], answer:1, hint:'The "being" word.', explain:'"is" is the verb.' },
+      { q:'"The boy is scolded." The verb tells us...', options:['what the boy does','what is done to the boy','what the boy is'], answer:1, hint:'Something is done TO the boy.', explain:'What is done to him.' },
+      { q:'Find the verb: "I feel sorry."', options:['I','feel','sorry'], answer:1, hint:'The word that tells how I am.', explain:'"feel" is the verb.' },
+    ]},
+  { icon:'🔗', short:'Many words', title:'Verbs of More Than One Word',
+    concept:'A verb is sometimes made of <b>more than one word</b>: <em>were singing, have learnt, has been found</em>.',
+    eg:'is reading · will come · has been found',
+    questions:[
+      { q:'Find the whole verb: "The girls were singing."', options:['girls were','were singing','singing loudly'], answer:1, hint:'Two words working together.', explain:'"were singing".' },
+      { q:'Find the whole verb: "I have learnt my lesson."', options:['have learnt','my lesson','I have'], answer:0, hint:'Helper + main word.', explain:'"have learnt".' },
+      { q:'Find the whole verb: "The watch has been found."', options:['has been','been found','has been found'], answer:2, hint:'Three words together here.', explain:'"has been found".' },
+      { q:'Find the whole verb: "She is reading a book."', options:['is reading','a book','reading a'], answer:0, hint:'is + reading.', explain:'"is reading".' },
+      { q:'Find the whole verb: "They will come tomorrow."', options:['will come','come tomorrow','they will'], answer:0, hint:'will + come.', explain:'"will come".' },
+      { q:'A verb can be made of...', options:['only one word','one or more words','always two words','always three words'], answer:1, hint:'Sometimes one, sometimes more.', explain:'One or more words.' },
+    ]},
+  { icon:'🎯', short:'Trans/Intrans', title:'Transitive or Intransitive?',
+    concept:'A <b>Transitive</b> verb\'s action <b>passes over to an object</b> (The boy kicks <i>the ball</i>). An <b>Intransitive</b> verb\'s action <b>stops with the doer</b> (The boy laughs).',
+    eg:'kicks the ball (trans.) · the baby sleeps (intrans.)',
+    questions:[
+      { q:'"The boy kicks the football." — "kicks" is...', options:['Transitive (has an object)','Intransitive (no object)'], answer:0, hint:'The kick goes over to "the football".', explain:'Transitive → object "football".' },
+      { q:'"The boy laughs loudly." — "laughs" is...', options:['Transitive','Intransitive'], answer:1, hint:'There is no object after it.', explain:'Intransitive.' },
+      { q:'"The baby sleeps." — "sleeps" is...', options:['Transitive','Intransitive'], answer:1, hint:'You can\'t "sleep" something.', explain:'Intransitive.' },
+      { q:'"She wrote a letter." — "wrote" is...', options:['Transitive','Intransitive'], answer:0, hint:'Wrote what? a letter (object).', explain:'Transitive → object "letter".' },
+      { q:'A Transitive verb must have an...', options:['object','adjective','adverb','article'], answer:0, hint:'The action passes over to it.', explain:'Transitive → object.' },
+      { q:'"He opened the door." — "opened" is...', options:['Transitive','Intransitive'], answer:0, hint:'Opened what? the door.', explain:'Transitive → object "door".' },
+    ]},
+  { icon:'🎁', short:'Objects', title:'Objects — Direct & Indirect',
+    concept:'The <b>Direct object</b> is the thing acted on (a watch). Some verbs (give, tell, offer) also take an <b>Indirect object</b> — the person who gets it (him). <em>His father gave <b>him</b> (indirect) <b>a watch</b> (direct).</em>',
+    eg:'gave him a watch · told me a secret',
+    questions:[
+      { q:'Find the object: "She kicked the ball."', options:['She','kicked','the ball'], answer:2, hint:'What was kicked?', explain:'object = the ball.' },
+      { q:'"His father gave him a watch." The DIRECT object (the thing) is...', options:['father','him','a watch'], answer:2, hint:'The thing that was given.', explain:'direct object = a watch.' },
+      { q:'"His father gave him a watch." The INDIRECT object (the person) is...', options:['father','him','a watch'], answer:1, hint:'Who received the watch?', explain:'indirect object = him.' },
+      { q:'"He told me a secret." The indirect object is...', options:['He','me','a secret'], answer:1, hint:'Who was told?', explain:'indirect object = me.' },
+      { q:'"He told me a secret." The direct object is...', options:['He','me','a secret'], answer:2, hint:'What was told?', explain:'direct object = a secret.' },
+      { q:'Find the object: "The boy lifted the heavy weight."', options:['The boy','lifted','the heavy weight'], answer:2, hint:'Lifted what?', explain:'object = the heavy weight.' },
+    ]},
+  { icon:'👑', short:'BOSS', title:'Boss — Linking Verbs & Complements',
+    concept:'Some verbs (<b>is, seem, become, grow, look, taste</b>) do not make full sense alone — they need a <b>complement</b> to complete the meaning. <em>The baby seems <b>happy</b>. John became <b>a soldier</b>.</em> Pass to become a <b>Verb Victor</b>! 👑',
+    eg:'The sky grew dark · You look happy',
+    questions:[
+      { q:'"The baby seems ___." The verb "seems"...', options:['makes full sense alone','needs a completing word'], answer:1, hint:'"The baby seems" — does that feel finished?', explain:'It needs a complement.' },
+      { q:'"John became a soldier." The completing word (complement) is...', options:['John','became','a soldier'], answer:2, hint:'What did John become?', explain:'complement = a soldier.' },
+      { q:'"The sky grew dark." The complement is...', options:['sky','grew','dark'], answer:2, hint:'The sky grew... what?', explain:'complement = dark.' },
+      { q:'"Sugar tastes sweet." The complement is...', options:['Sugar','tastes','sweet'], answer:2, hint:'Tastes how?', explain:'complement = sweet.' },
+      { q:'"You look happy." The complement is...', options:['You','look','happy'], answer:2, hint:'Look how?', explain:'complement = happy.' },
+      { q:'Find the verb: "The hungry lion roars."', options:['hungry','lion','roars'], answer:2, hint:'What does the lion do?', explain:'verb = roars.' },
+      { q:'"The report proved false." The complement is...', options:['report','proved','false'], answer:2, hint:'Proved to be...?', explain:'complement = false.' },
+      { q:'"We see with our eyes." — "see" is...', options:['Transitive','Intransitive'], answer:0, hint:'See what? (it can take an object).', explain:'Used transitively.' },
+      { q:'"The child fell asleep." The complement is...', options:['child','fell','asleep'], answer:2, hint:'Fell into what state?', explain:'complement = asleep.' },
+      { q:'Linking verbs need a word called the...', options:['object','complement','adverb','article'], answer:1, hint:'It completes the meaning.', explain:'complement.' },
+    ]},
+];
+
+let verbState = null;
+function renderVerbMap() {
+  const map = document.getElementById('verbMap'); if (!map) return;
+  const unlocked = STATE.verb.unlocked || 1;
+  map.innerHTML = VERB_LEVELS.map((lv, i) => {
+    const n = i + 1, best = STATE.verb.stars[n] || 0;
+    let cls = best > 0 ? 'done' : (n <= unlocked ? 'unlocked' : 'locked');
+    const stars = best > 0 ? '⭐'.repeat(best) + '☆'.repeat(3 - best) : (cls === 'locked' ? '🔒' : '• • •');
+    const lock = cls === 'locked' ? '<span class="lock-ic">🔒</span>' : '';
+    const click = cls === 'locked' ? '' : `onclick="openVerbLevel(${n})"`;
+    return `<div class="level-node ${cls}" ${click}>${lock}<span class="lvl-num">${lv.icon}</span><span class="lvl-name">${n}. ${lv.short}</span><span class="lvl-stars">${stars}</span></div>`;
+  }).join('');
+}
+function toggleVerbLearn() {
+  const el = document.getElementById('verbLearn');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+function verbBackToMap() {
+  document.getElementById('verbPlay').style.display = 'none';
+  document.getElementById('verbHome').style.display = 'block';
+  renderVerbMap();
+}
+function openVerbLevel(n) {
+  const lv = VERB_LEVELS[n - 1]; if (!lv) return;
+  document.getElementById('verbHome').style.display = 'none';
+  const play = document.getElementById('verbPlay'); play.style.display = 'block';
+  verbState = { level:n, qIndex:0, correct:0, total:lv.questions.length, answered:false };
+  play.innerHTML = `
+    <div class="game-hud"><button class="back-btn" onclick="verbBackToMap()">← Map</button><span class="hud-target">${lv.icon} Level ${n}: ${lv.title}</span></div>
+    <div class="concept-card"><h3>${lv.icon} ${lv.title}</h3><p>${lv.concept}</p>${lv.eg ? `<div class="eg">${lv.eg}</div>` : ''}</div>
+    <div id="verbQ"></div>`;
+  speak(lv.title + '. ' + lv.concept.replace(/<[^>]+>/g, ''));
+  renderVerbQ();
+}
+function renderVerbQ() {
+  const lv = VERB_LEVELS[verbState.level - 1], i = verbState.qIndex;
+  if (i >= lv.questions.length) { finishVerbLevel(); return; }
+  verbState.answered = false;
+  const q = lv.questions[i];
+  const opts = q.options.map((o, idx) => `<button class="option-btn" data-idx="${idx}" onclick="answerVerb(${idx})">${o}</button>`).join('');
+  const hintBtn = q.hint ? `<div style="margin-top:10px;"><button class="btn btn-small btn-hint" onclick="showVerbHint()">💡 Hint</button></div><div class="hint-box" id="verbHint" style="display:none;"></div>` : '';
+  document.getElementById('verbQ').innerHTML = `<div class="exercise-card"><div class="q">${q.q}</div><div class="options">${opts}</div>${hintBtn}<div class="feedback" id="verbFb"></div><div style="margin-top:12px;text-align:right;"><span style="color:var(--text-muted);font-size:0.85rem;">Question ${i + 1}/${lv.questions.length}</span><div class="progress-bar"><div class="fill" style="width:${(i / lv.questions.length) * 100}%;"></div></div></div></div>`;
+}
+function showVerbHint() {
+  const q = VERB_LEVELS[verbState.level - 1].questions[verbState.qIndex];
+  const box = document.getElementById('verbHint');
+  if (box && q.hint) { box.textContent = '💡 ' + q.hint; box.style.display = 'block'; }
+}
+function answerVerb(idx) {
+  if (verbState.answered) return; verbState.answered = true;
+  const lv = VERB_LEVELS[verbState.level - 1], q = lv.questions[verbState.qIndex], correct = q.answer;
+  const fb = document.getElementById('verbFb');
+  document.querySelectorAll('#verbQ .option-btn').forEach(b => { b.disabled = true; const bi = parseInt(b.dataset.idx); if (bi === correct) b.classList.add('correct'); else if (bi === idx && idx !== correct) b.classList.add('wrong'); });
+  if (idx === correct) { fb.className = 'feedback correct show'; fb.textContent = '✅ Correct! ' + (q.explain || ''); verbState.correct++; addStar(); fireConfetti(8); checkBadges(); }
+  else { fb.className = 'feedback wrong show'; fb.textContent = '❌ ' + (q.explain || ('Answer: ' + q.options[correct])); addWrong(); }
+  verbState.qIndex++; saveState(); setTimeout(renderVerbQ, 1200);
+}
+function finishVerbLevel() {
+  const n = verbState.level, pct = Math.round((verbState.correct / verbState.total) * 100), stars = adjStars(pct);
+  if (stars > (STATE.verb.stars[n] || 0)) STATE.verb.stars[n] = stars;
+  const passed = stars >= 1;
+  if (passed && n < 6 && (STATE.verb.unlocked || 1) < n + 1) STATE.verb.unlocked = n + 1;
+  saveState();
+  const starRow = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  let next = '';
+  if (passed && n < 6) next = `<button class="btn btn-primary" onclick="openVerbLevel(${n + 1})">▶️ Next Level</button> `;
+  else if (!passed) next = `<button class="btn btn-primary" onclick="openVerbLevel(${n})">🔄 Try Again</button> `;
+  const boss = (passed && n === 6) ? '<p style="color:var(--accent);font-weight:800;font-size:1.1rem;margin-top:6px;">👑 You are a VERB VICTOR!</p>' : '';
+  document.getElementById('verbPlay').innerHTML = `<div class="result-box"><div class="big">${passed ? (n === 6 ? '👑' : '🎉') : '💪'}</div><div class="score-text">Level ${n} ${passed ? 'Complete!' : '— Try again!'}</div><div style="font-size:1.9rem;margin:6px 0;">${starRow}</div><p>You got <strong>${verbState.correct}</strong>/<strong>${verbState.total}</strong> (${pct}%)</p>${boss}<p style="color:var(--text-muted);font-size:0.85rem;">${passed ? 'Tip: score 90%+ for all 3 stars!' : 'Get at least half right to unlock the next level.'}</p><div style="margin-top:14px;">${next}<button class="btn btn-small btn-success" onclick="verbBackToMap()">🗺️ Level Map</button></div></div>`;
+  if (passed) { fireConfetti(stars >= 3 ? 40 : 20); playFanfare(); if (stars >= 3) showStarBurst(); }
+}
+
+// ============================================================
 // RESET
 // ============================================================
 function resetProgress() {
@@ -2184,9 +2580,11 @@ function resetProgress() {
   STATE.cpIndex = 0; STATE.collIndex = 0; STATE.absIndex = 0; STATE.countIndex = 0; STATE.genderIndex = 0; STATE.numIndex = 0;
   STATE.adj = { unlocked: 1, stars: {} };
   STATE.art = { unlocked: 1, stars: {} };
+  STATE.pron = { unlocked: 1, stars: {} };
+  STATE.verb = { unlocked: 1, stars: {} };
   saveState(); updateUI();
   resetCP(); resetColl(); resetAbs(); resetGender(); resetNum(); resetCount();
-  adjBackToMap(); artBackToMap();
+  adjBackToMap(); artBackToMap(); pronBackToMap(); verbBackToMap();
   document.getElementById('quizArea').innerHTML = `<div style="text-align:center;padding:30px 0;color:var(--text-muted);"><span style="font-size:3rem;">🎮</span><p style="margin-top:10px;">Pick a game above to start playing!</p></div>`;
 }
 
@@ -2230,7 +2628,9 @@ loadState();
 renderCP(); renderColl(); renderAbs(); renderGender(); renderNum(); renderCount();
 if (!STATE.adj) STATE.adj = { unlocked: 1, stars: {} };
 if (!STATE.art) STATE.art = { unlocked: 1, stars: {} };
-renderAdjMap(); renderArtMap();
+if (!STATE.pron) STATE.pron = { unlocked: 1, stars: {} };
+if (!STATE.verb) STATE.verb = { unlocked: 1, stars: {} };
+renderAdjMap(); renderArtMap(); renderPronMap(); renderVerbMap();
 
 // Sync sound + grade controls with saved state
 document.getElementById('soundIcon').textContent = STATE.soundOn ? '🔊' : '🔇';
