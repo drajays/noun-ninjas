@@ -729,7 +729,7 @@
 
       <div class="learn-section">
         <h3>📝 Printable Worksheet</h3>
-        <p>A mixed noun worksheet — plurals, gender, collective nouns, classify &amp; find-the-noun — plus a teacher answer key on the last page.</p>
+        <p>A mixed <strong>Nouns &amp; Adjectives</strong> worksheet — plurals, gender, collective nouns, common/proper, find-the-noun, <strong>plus adjectives</strong> (circle the adjective, name its kind, comparative &amp; superlative) — with a teacher answer key on the last page.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;">
           <input class="text-input" id="wsTitle" placeholder="Worksheet title (optional)" maxlength="40">
           <button class="btn btn-primary" onclick="generateWorksheet()">🖨️ Make Worksheet</button>
@@ -1682,27 +1682,62 @@ function generateWorksheet() {
   const title = (document.getElementById('wsTitle').value || '').trim() || 'Noun Ninjas — Practice Worksheet';
   const A = pickN(NUM_DATA, 8), B = pickN(GENDER_DATA, 6), C = pickN(COLL_DATA, 6),
         D = pickN(CP_DATA, 8), E = pickN(QUIZ_IDENTIFY, 5);
+  // ---- Adjective worksheet pools ----
+  const ADJ_FIND = [
+    { s:'Sita is a clever girl.', a:'clever' }, { s:'He gave me five mangoes.', a:'five' },
+    { s:'The lazy boy was punished.', a:'lazy' }, { s:'Kolkata is a large city.', a:'large' },
+    { s:'I ate some rice.', a:'some' }, { s:'That boy is industrious.', a:'that' },
+    { s:'The foolish crow tried to sing.', a:'foolish' }, { s:'Take great care of your health.', a:'great' },
+    { s:'There are no pictures in the bag.', a:'no' }, { s:'He showed much patience.', a:'much' },
+    { s:'Whose book is this?', a:'whose' }, { s:'These mangoes are sour.', a:'these' },
+  ];
+  const ADJ_KIND = [
+    { p:'a large city', k:'Quality' }, { p:'some rice', k:'Quantity' }, { p:'five fingers', k:'Number' },
+    { p:'that boy', k:'Demonstrative' }, { p:'whose pen', k:'Interrogative' }, { p:'much patience', k:'Quantity' },
+    { p:'an honest man', k:'Quality' }, { p:'the first day', k:'Number' }, { p:'these mangoes', k:'Demonstrative' },
+    { p:'which way', k:'Interrogative' }, { p:'a foolish crow', k:'Quality' }, { p:'every man', k:'Number' },
+  ];
+  const ADJ_CMP = [
+    { w:'tall', c:'taller', s:'tallest' }, { w:'big', c:'bigger', s:'biggest' }, { w:'happy', c:'happier', s:'happiest' },
+    { w:'fine', c:'finer', s:'finest' }, { w:'heavy', c:'heavier', s:'heaviest' }, { w:'good', c:'better', s:'best' },
+    { w:'bad', c:'worse', s:'worst' }, { w:'beautiful', c:'more beautiful', s:'most beautiful' },
+    { w:'brave', c:'braver', s:'bravest' }, { w:'easy', c:'easier', s:'easiest' }, { w:'hot', c:'hotter', s:'hottest' },
+    { w:'little', c:'less', s:'least' },
+  ];
+  const F = pickN(ADJ_FIND, 6), G = pickN(ADJ_KIND, 6), H = pickN(ADJ_CMP, 6);
+
   const secA = A.map(q => `<li>${q.word} &rarr; ____________________</li>`).join('');
   const secB = B.map(q => `<li>${q.word} &rarr; ____________________</li>`).join('');
   const secC = C.map(q => `<li>a ____________________ of ${q.word}</li>`).join('');
   const secD = D.map(q => `<li>${q.word} &nbsp;&nbsp; ( C&nbsp;/&nbsp;P )</li>`).join('');
   const secE = E.map(q => `<li>${extractSentence(q.q)}<br><span class="opts">Circle the noun: ${q.options.join(' &nbsp;/&nbsp; ')}</span></li>`).join('');
+  const secF = F.map(q => `<li>${q.s}</li>`).join('');
+  const secG = G.map(q => `<li>${q.p} &nbsp;&rarr;&nbsp; ____________________</li>`).join('');
+  const secH = H.map(q => `<li>${q.w} &nbsp;&rarr;&nbsp; ______________ &nbsp;&rarr;&nbsp; ______________</li>`).join('');
   const keyA = A.map(q => `${q.word} → <b>${q.answer}</b>`).join(' &nbsp;•&nbsp; ');
   const keyB = B.map(q => `${q.word} → <b>${q.answer}</b>`).join(' &nbsp;•&nbsp; ');
   const keyC = C.map(q => `${q.word} → <b>${q.answer}</b>`).join(' &nbsp;•&nbsp; ');
   const keyD = D.map(q => `${q.word} → <b>${q.answer === 'proper' ? 'P' : 'C'}</b>`).join(' &nbsp;•&nbsp; ');
   const keyE = E.map(q => `"${extractSentence(q.q)}" → <b>${q.options[q.answer]}</b>`).join('<br>');
+  const keyF = F.map(q => `"${q.s}" → <b>${q.a}</b>`).join('<br>');
+  const keyG = G.map(q => `${q.p} → <b>${q.k}</b>`).join(' &nbsp;•&nbsp; ');
+  const keyH = H.map(q => `${q.w} → <b>${q.c}</b> → <b>${q.s}</b>`).join('<br>');
   const inner = `
     <div class="sheet">
       <h1>🌟 ${title}</h1>
       <div class="sub">Noun Ninjas — Grammar Adventure for Classes 1–5</div>
       <div class="meta"><span>Name: ______________________</span><span>Class: ________</span><span>Date: ____________</span></div>
+      <h2>Part 1 — Nouns</h2>
       <h2>A. Write the plural of each noun</h2><ol class="cols">${secA}</ol>
       <h2>B. Write the feminine (female) form</h2><ol class="cols">${secB}</ol>
       <h2>C. Write the collective noun for each group</h2><ol class="cols">${secC}</ol>
       <h2>D. Write C for Common noun or P for Proper noun</h2><ol class="cols">${secD}</ol>
       <h2>E. Circle the noun in each sentence</h2><ol>${secE}</ol>
-      <div class="foot">🦉 Made with Noun Ninjas — Score: ____ / 33 &nbsp; ⭐⭐⭐</div>
+      <h2>Part 2 — Adjectives</h2>
+      <h2>F. Circle the adjective in each sentence</h2><ol>${secF}</ol>
+      <h2>G. Name the kind of adjective <span style="font-weight:400;font-size:0.85rem;">(Quality / Quantity / Number / Demonstrative / Interrogative)</span></h2><ol class="cols">${secG}</ol>
+      <h2>H. Write the Comparative and Superlative <span style="font-weight:400;font-size:0.85rem;">(Positive → Comparative → Superlative)</span></h2><ol>${secH}</ol>
+      <div class="foot">🦉 Made with Noun Ninjas — Score: ____ / 51 &nbsp; ⭐⭐⭐</div>
     </div>
     <div class="sheet key">
       <h1>✅ Answer Key (Teacher Copy)</h1>
@@ -1711,6 +1746,9 @@ function generateWorksheet() {
       <h2>C. Collective nouns</h2><p>${keyC}</p>
       <h2>D. Common / Proper</h2><p>${keyD}</p>
       <h2>E. The noun in each sentence</h2><p>${keyE}</p>
+      <h2>F. The adjective in each sentence</h2><p>${keyF}</p>
+      <h2>G. Kind of adjective</h2><p>${keyG}</p>
+      <h2>H. Comparative &amp; Superlative</h2><p>${keyH}</p>
     </div>`;
   openPrint(title, inner);
   spawnSparkle('🖨️');
